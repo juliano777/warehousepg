@@ -101,10 +101,10 @@ ulimit -n 65536 65536
 # Deactivate or Configure Firewall Software
 systemctl disable --now firewalld
 
-#
-groupadd gpadmin
+# Group creation
+groupadd -r gpadmin
 
-#
+# User creation
 useradd \
     -s /bin/bash \
     -md /var/local/whpg \
