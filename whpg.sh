@@ -1,13 +1,55 @@
+# === Compilation
+
+# Python
+update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
+update-alternatives --install /usr/bin/python3 python /usr/bin/python3.12 1
+update-alternatives --set python3 /usr/bin/python3.12
+update-alternatives --set python /usr/bin/python3.12
+
+export PYTHON='/usr/bin/python3.12'
+
+dnf install -y epel-release
+dnf update -y
+
+dnf group install -y "Development Tools"
+
+export PKG="apr-devel bison bzip2-devel cmake3 flex gcc gcc-c++ krb5-devel \
+libcurl-devel libevent-devel libkadm5 libxml2-devel libzstd-devel \
+openssl-devel python3.12 python3-devel python3.12-devel python3-psutil \
+python3.12-pip perl-ExtUtils-MakeMaker.noarch perl-ExtUtils-Embed.noarch \
+readline-devel rsync xerces-c-devel zlib-devel python3-psutil python3-pyyaml \
+python3-psycopg2 perl perl-interpreter libyaml-devel libuuid-devel \
+cyrus-sasl cyrus-sasl-devel openldap-devel postgresql postgresql-devel"
+
+dnf install -y ${PKG} && dnf clean all
+
+
+CFLAGS="-Wno-error -O2" CXXFLAGS="-std=c++17 -Wno-error" \
+    ./configure --prefix=/usr/local/whpg
+
+make
+
+make install
+
+tar cvf /tmp/whpg.tar /usr/local/whpg
+
+
+
+# ==========================================================================================
+
+podman container cp compiler:/tmp/whpg.tar.xz test:/tmp/
+
+tar xvf /tmp/whpg.tar.xz -C /
 
 dnf install -y epel-release
 dnf update -y
 
 PKG="python3.12 python3.12-devel python3.12-psycopg2 python3.12-pyyaml \
-python3.12-psutil neovim procps-ng install apr apr-util bash bzip2 curl krb5 \
+python3.12-psutil neovim procps-ng apr apr-util bash bzip2 curl krb5 \
 libcurl libevent libxml2 libyaml zlib openldap openssh openssl openssl-libs \
 perl readline rsync R sed tar zip"
 
-eval "dnf install -y ${PKG}"
+dnf install -y ${PKG}
 
 update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
 update-alternatives --install /usr/bin/python3 python /usr/bin/python3.12 1
