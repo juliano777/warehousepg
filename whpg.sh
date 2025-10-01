@@ -159,9 +159,38 @@ useradd \
     -md /var/local/whpg \
     -k /etc/skel \
     -g gpadmin \
+    -G wheel \
     -c 'Greenplum admin WarehousePG user' \
-    gpadmin
+    -r gpadmin
 
+#
+su - gpadmin
+
+#
+ssh-keygen -t rsa -b 4096 -P '' -f ~/.ssh/id_rsa
+
+# 
+cat << EOF > ~/.whpg_vars
+# 
+WHPG_HOME='/usr/local/whpg'
+
+# Library directories
+export LD_LIBRARY_PATH="\${WHPG_HOME}/lib:\${LD_LIBRARY_PATH}"
+
+# Manuals directories
+export MANPATH="\${WHPG_HOME}/man:\${MANPATH}"
+
+# PostgreSQL data directory
+export PGDATA='/var/local/whpg/data'
+
+# Unset variables
+unset WHPG_HOME PGBIN
+EOF
+
+
+# 
+echo "source /usr/local/whpg/greenplum_path.sh" >> ~/.bash_profile
+echo "source ~/.whpg_vars" >> ~/.bash_profile
 
 
 
