@@ -10,7 +10,7 @@ export PYTHON="/usr/bin/python${PYTHON_VERSON}"
 # Profile script
 cat << EOF > /etc/profile.d/python.sh 
 # Python environment variables
-export PYTHON_VERSON='${PYTHON}'
+export PYTHON_VERSON='${PYTHON_VERSON}'
 
 # Python binary
 export PYTHON='/usr/bin/python${PYTHON_VERSON}'
