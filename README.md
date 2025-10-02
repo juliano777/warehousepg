@@ -21,9 +21,6 @@ git clone https://github.com/juliano777/warehousepg.git && cd warehousepg/
 
 
 
-
-
-
 Network creation:
 ```bash
 podman network create net_whpg
@@ -31,9 +28,8 @@ podman network create net_whpg
 
 Environment variables regarding servers / containers:
 ```bash
-# Compiler container
-CMPCT='compiler'
-MSTRDB='masterdb'
+CMPCT='compiler'  # Compiler container
+MSTRDB='masterdb'  # Master (coordinator)
 WHPGCLSTR="${MSTRDB} sdw1 sdw2 sdw3 sdw4"
 ALLSRV="${CMPCT} ${WHPGCLSTR}"
 ```
@@ -43,7 +39,11 @@ Initial tasks for all containers:
 for i in ${ALLSRV}; do
     # Container creation
     echo "--- ${i} ----------------------------------------------------------"
-    podman container run -itd --name ${i} --hostname ${i}.edb -p 5432 -p 22 \
+    podman container run -itd \
+        --cap-add=NET_RAW  \
+        --name ${i} \
+        --hostname ${i}.edb \
+        -p 5432 -p 22 \
         --network net_whpg almalinux:10
 
     # Copy scripts directory into the container
@@ -74,19 +74,30 @@ for i in ${WHPGCLSTR}; do
 done
 ```
 
-SSH
+SSH:
 ```bash
 for i in ${WHPGCLSTR}; do
     # Copy compiled WarehousePg tarball
-    podman container exec -itu gpadmin ${i} sh -c 'cat ~/.ssh/id_rsa.pub' | \
-        podman container exec -iu gpadmin masterdb \
+    podman container exec -itu gpadmin masterdb sh -c 'cat ~/.ssh/id_rsa.pub' | \
+        podman container exec -iu gpadmin ${i} \
             sh -c 'cat >> ~/.ssh/authorized_keys'
+
+    # 
+    podman container exec -u gpadmin masterdb \
+        sh -c "ssh -o StrictHostKeyChecking=no ${i}"
+
 done
-
-
-
 ```
 
+
+Master:
+```bash
+podman container exec -itu gpadmin masterdb \
+    sh -c '/tmp/scripts/03_masterdb.sh'
+```
+
+        
+<!--
 
 ```bash
 # /etc/hosts
@@ -101,7 +112,7 @@ sdw3
 EOF
 ```
 
-
+-->
 
 
 

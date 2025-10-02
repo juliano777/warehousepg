@@ -35,7 +35,8 @@ dnf install -y epel-release
 dnf update -y
 
 # Install some packages
-dnf install -y neovim bash-completion procps-ng util-linux sudo openssh-server
+dnf install -y neovim bash-completion procps-ng util-linux sudo \
+    openssh-clients openssh-server iproute rsync 
 
 # Clear downloaded packages
 dnf clean all
@@ -61,7 +62,7 @@ su - gpadmin -c "ssh-keygen -t rsa -b 4096 -P '' -f ~/.ssh/id_rsa"
 # WarehousePg variables
 cat << EOF > ~gpadmin/.whpg_vars
 # WarehousePg Home (installation directory)
-WHPG_HOME='/usr/local/whpg'
+export WHPG_HOME='/usr/local/whpg'
 
 # Library directories
 export LD_LIBRARY_PATH="\${WHPG_HOME}/lib:\${LD_LIBRARY_PATH}"
@@ -73,7 +74,7 @@ export MANPATH="\${WHPG_HOME}/man:\${MANPATH}"
 export MASTER_DIRECTORY='/var/local/whpg/data/master'
 
 # Data directory
-DATA_DIRECTORY="/var/local/whpg/data/sdw1 /var/local/whpg/data/sdw2 \
+export DATA_DIRECTORY="/var/local/whpg/data/sdw1 /var/local/whpg/data/sdw2 \
 /var/local/whpg/data/sdw3"
 
 # DB port
