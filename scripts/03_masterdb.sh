@@ -25,17 +25,17 @@ cat << EOF > ~gpadmin/gpinitsystem_config
 ARRAY_NAME="whcluster_acme"
 
 # O nome do banco de dados inicial a ser criado (geralmente 'postgres' ou 'template1').
-DATABASE_NAME='${PGDATABASE}'
+DATABASE_NAME=${PGDATABASE}
 
-COORDINATOR_HOSTNAME="`hostname -s`"
+COORDINATOR_HOSTNAME=`hostname -s`
 
 # A porta base para as instâncias de segmento.
 # A porta do Master será BASE_PORT + 1. Os segmentos usarão as portas seguintes.
-PORT_BASE=40000
+PORT_BASE=60000
 
 # O ID do Master. Use 0 para sistemas de teste.
 MASTER_ARRAY_HOST=0
-MASTER_PORT='${PGPORT}' # A porta do Master no seu host (pode ser a 5432 padrão ou outra)
+MASTER_PORT=${PGPORT} # A porta do Master no seu host (pode ser a 5432 padrão ou outra)
 
 # Prefixo para os diretórios de dados. Cada segmento terá um diretório
 # com este prefixo seguido de um número. Ex: /data/gpseg0, /data/gpseg1
@@ -47,14 +47,14 @@ SEG_PREFIX=gpseg
 
 # Diretórios de dados do Master (coloque em um disco/volume persistente)
 # Exemplo: /home/gpadmin/gpdata/master
-MASTER_DIRECTORY='${MASTER_DIRECTORY}'
+MASTER_DIRECTORY=${MASTER_DIRECTORY}
 
 # Diretórios de dados dos Segmentos. Deve ser um caminho *existente* em cada host
 # listado no hostfile. Para um VM, é um caminho único.
 # ATENÇÃO: Se usar múltiplos segmentos virtuais, você precisará de múltiplos diretórios.
 # Exemplo: DATA_DIRECTORY=/home/seu_usuario/gpdata/segmento1 /home/seu_usuario/gpdata/segmento2
 # Se você tiver 4 segmentos no hostfile, precisará de 4 caminhos aqui.
-DATA_DIRECTORY='${DATA_DIRECTORY}'
+DATA_DIRECTORY=${DATA_DIRECTORY}
 
 # #####################################################################
 # CONFIGURAÇÃO DE REDE (Recomendado para ambientes de teste)
@@ -66,4 +66,6 @@ MACHINE_SEGMENTS=3 # (Neste exemplo, assumindo 4 linhas no hostfile)
 EOF
 
 chown -R gpadmin: ~gpadmin
+
+setcap cap_net_raw+ep /usr/bin/ping
 

@@ -77,12 +77,12 @@ done
 SSH:
 ```bash
 for i in ${WHPGCLSTR}; do
-    # Copy compiled WarehousePg tarball
+    # Add Master SSH key (gpadmin user) to segment nodes
     podman container exec -itu gpadmin masterdb sh -c 'cat ~/.ssh/id_rsa.pub' | \
         podman container exec -iu gpadmin ${i} \
             sh -c 'cat >> ~/.ssh/authorized_keys'
 
-    # 
+    # Allow hosts automatically
     podman container exec -u gpadmin masterdb \
         sh -c "ssh -o StrictHostKeyChecking=no ${i}"
 
@@ -92,8 +92,7 @@ done
 
 Master:
 ```bash
-podman container exec -itu gpadmin masterdb \
-    sh -c '/tmp/scripts/03_masterdb.sh'
+setcap cap_net_raw+ep /usr/bin/ping
 ```
 
         
