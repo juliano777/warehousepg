@@ -101,7 +101,7 @@ for i in ${WHPGCLSTR}; do
             mkdir -p  \${MASTER_DIRECTORY}"
     fi
 done
-
+```
 
 Master:
 ```bash
@@ -124,6 +124,9 @@ sdw3
 
 EOF
 ```
+
+gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem -a
+
 
 rm -fr /var/local/whpg/data && \
 ssh sdw1 'rm -fr /var/local/whpg/data' && \
