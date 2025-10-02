@@ -6,8 +6,8 @@ libcurl-devel libevent-devel libkadm5 libxml2-devel libzstd-devel \
 openssl-devel python${PYTHON_VERSON} python3-devel \
 python${PYTHON_VERSON}-devel python3-psutil python${PYTHON_VERSON}-pip \
 perl-ExtUtils-MakeMaker.noarch perl-ExtUtils-Embed.noarch \
-readline-devel rsync xerces-c-devel zlib-devel python3-psutil python3-pyyaml \
-python3-psycopg2 perl perl-interpreter libyaml-devel libuuid-devel \
+readline-devel rsync xerces-c-devel zlib-devel python3-psutil \
+perl perl-interpreter libyaml-devel libuuid-devel \
 cyrus-sasl cyrus-sasl-devel openldap-devel postgresql postgresql-devel git"
 
 # Install development tools

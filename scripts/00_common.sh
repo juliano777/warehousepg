@@ -36,7 +36,8 @@ dnf update -y
 
 #
 PKG="xerces-c neovim bash-completion procps-ng util-linux sudo \
-openssh-clients openssh-server iproute rsync"
+openssh-clients openssh-server iproute rsync python3-psycopg2 \
+python3-pyyaml python3-psutil"
 
 # Install some packages
 dnf install -y ${PKG}
@@ -72,7 +73,7 @@ cat << EOF > ~gpadmin/.whpg_vars
 export WHPG_HOME='/usr/local/whpg'
 
 # Library directories
-export LD_LIBRARY_PATH="\${WHPG_HOME}/lib:\${LD_LIBRARY_PATH}"
+#export LD_LIBRARY_PATH="\${WHPG_HOME}/lib:\${LD_LIBRARY_PATH}"
 
 # Manuals directories
 export MANPATH="\${WHPG_HOME}/man:\${MANPATH}"
