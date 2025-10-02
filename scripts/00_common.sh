@@ -170,3 +170,6 @@ EOF
 # New lines to profile script
 echo "source /usr/local/whpg/greenplum_path.sh" >> ~gpadmin/.bash_profile
 echo "source ~/.whpg_vars" >> ~gpadmin/.bash_profile
+
+# Set ownership
+chown -R gpadmin: ~gpadmin
