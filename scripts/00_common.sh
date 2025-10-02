@@ -134,7 +134,7 @@ useradd \
     -r gpadmin
 
 # Generate SSH keys for gpadmin
-su - tux -c "ssh-keygen -t rsa -b 4096 -P '' -f ~/.ssh/id_rsa"
+su - gpadmin -c "ssh-keygen -t rsa -b 4096 -P '' -f ~/.ssh/id_rsa"
 
 # WarehousePg variables
 cat << EOF > ~gpadmin/.whpg_vars
