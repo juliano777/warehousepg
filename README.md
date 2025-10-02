@@ -63,25 +63,14 @@ Conpilation:
 podman container exec -it ${CMPCT} /tmp/scripts/01_compilation.sh
 ```
 
-
-
-
-
-
-
+WarehoousePG tarball installation on nodes:
 ```bash
-for i in ${ALLSRV}; do
-    # Container creation
-    podman container run -itd --name ${i} --hostname ${i}.edb -p 5432 \
-        --network net_whpg almalinux:10
-
+for i in ${WHPGCLSTR}; do
+    # Copy compiled WarehousePg tarball
     podman container cp compiler:/tmp/whpg.tar.xz ${i}:/tmp/
 
-    podman container cp /tmp/00_script.sh ${i}:/tmp/
-podman container exec -it ${i} chmod +x /tmp/00_script.sh
-
-    podman container exec -it ${i} /tmp/00_script.sh
-
+    # Exectute script to install dependencies and install the tarball content
+    podman container exec -it ${i} sh -c '/tmp/scripts/02_nodes.sh'
 done
 ```
 
