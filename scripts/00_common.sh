@@ -74,7 +74,7 @@ export MASTER_DIRECTORY='/var/local/whpg/data/master'
 
 # Data directory
 DATA_DIRECTORY="/var/local/whpg/data/sdw1 /var/local/whpg/data/sdw2 \
-/var/local/whpg/data/sdw3'
+/var/local/whpg/data/sdw3"
 
 # DB port
 export PGPORT=5432
