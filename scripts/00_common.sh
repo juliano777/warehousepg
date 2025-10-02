@@ -34,9 +34,16 @@ dnf install -y epel-release
 # Update the system
 dnf update -y
 
+#
+PKG="xerces-c neovim bash-completion procps-ng util-linux sudo \
+openssh-clients openssh-server iproute rsync"
+
 # Install some packages
-dnf install -y neovim bash-completion procps-ng util-linux sudo \
-    openssh-clients openssh-server iproute rsync 
+dnf install -y ${PKG}
+
+# 
+# chmod u+s /usr/bin/ping
+setcap cap_net_raw+ep /usr/bin/ping
 
 # Clear downloaded packages
 dnf clean all

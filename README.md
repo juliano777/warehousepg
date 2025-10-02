@@ -30,7 +30,8 @@ Environment variables regarding servers / containers:
 ```bash
 CMPCT='compiler'  # Compiler container
 MSTRDB='masterdb'  # Master (coordinator)
-WHPGCLSTR="${MSTRDB} sdw1 sdw2 sdw3 sdw4"
+SEGNODES='sdw1 sdw2 sdw3 sdw4'
+WHPGCLSTR="${MSTRDB} ${SEGNODES}"
 ALLSRV="${CMPCT} ${WHPGCLSTR}"
 ```
 
@@ -89,10 +90,23 @@ for i in ${WHPGCLSTR}; do
 done
 ```
 
+Cluster nodes:
+```bash
+for i in ${WHPGCLSTR}; do
+    podman container exec -u gpadmin ${i} \
+        sh -c 'mkdir -p ${DATA_DIRECTORY}'
+
+    if [ ${i} == ${MSTRDB} ]; then
+        podman container exec -u gpadmin ${i} sh -c "source ~/.whpg_vars && \
+            mkdir -p  \${MASTER_DIRECTORY}"
+    fi
+done
+
 
 Master:
 ```bash
-setcap cap_net_raw+ep /usr/bin/ping
+podman container exec -itu gpadmin masterdb \
+    sh -c 'source ~/.whpg_vars && /tmp/scripts/03_masterdb.sh'
 ```
 
         
