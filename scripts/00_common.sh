@@ -105,7 +105,8 @@ EOF
 
 ulimit -n 65536 65536
 
-# /etc/selinux/config file. As root, change the value of the SELINUX parameter in the config file as follows:
+# /etc/selinux/config file. As root, change the value of the SELINUX
+# parameter in the config file as follows:
 # SELINUX=disabled
 
 # As root, edit /etc/sssd/sssd.conf and add this parameter:
@@ -113,6 +114,8 @@ ulimit -n 65536 65536
 
 # Deactivate or Configure Firewall Software
 systemctl disable --now firewalld
+
+# gpadmin system user --------------------------------------------------------
 
 # Group creation
 groupadd -r gpadmin
@@ -129,3 +132,38 @@ useradd \
 
 # Generate SSH keys for gpadmin
 su - tux -c "ssh-keygen -t rsa -b 4096 -P '' -f ~/.ssh/id_rsa"
+
+# WarehousePg variables
+cat << EOF > ~gpafmin/.whpg_vars
+# WarehousePg Home (installation directory)
+WHPG_HOME='/usr/local/whpg'
+
+# Library directories
+export LD_LIBRARY_PATH="\${WHPG_HOME}/lib:\${LD_LIBRARY_PATH}"
+
+# Manuals directories
+export MANPATH="\${WHPG_HOME}/man:\${MANPATH}"
+
+# Master directory
+export MASTER_DIRECTORY='/var/local/whpg/data/master'
+
+# Data directory
+DATA_DIRECTORY="/var/local/whpg/data/sdw1 /var/local/whpg/data/sdw2 \
+/var/local/whpg/data/sdw3'
+
+# DB port
+export PGPORT=5432
+
+# DB user
+export PGUSER=gpadmin
+
+# Database
+export PGDATABASE=gpadmin
+
+# Unset variables
+unset WHPG_HOME PGBIN
+EOF
+
+# New lines to profile script
+echo "source /usr/local/whpg/greenplum_path.sh" >> ~gpafmin/.bash_profile
+echo "source ~/.whpg_vars" >> ~gpafmin/.bash_profile
