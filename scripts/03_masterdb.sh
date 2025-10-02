@@ -26,7 +26,7 @@ DATA_DIRECTORY='${DATA_DIRECTORY}'
 MACHINE_SEGMENTS=3
 EOF
 
-# gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem
+# libxerces-c-3.2.so
 
 
 

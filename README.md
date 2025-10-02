@@ -94,7 +94,7 @@ Cluster nodes:
 ```bash
 for i in ${WHPGCLSTR}; do
     podman container exec -u gpadmin ${i} \
-        sh -c 'mkdir -p ${DATA_DIRECTORY}'
+        sh -c 'source ~/.whpg_vars && mkdir -p ${DATA_DIRECTORY}'
 
     if [ ${i} == ${MSTRDB} ]; then
         podman container exec -u gpadmin ${i} sh -c "source ~/.whpg_vars && \
@@ -124,6 +124,13 @@ sdw3
 
 EOF
 ```
+
+rm -fr /var/local/whpg/data && \
+ssh sdw1 'rm -fr /var/local/whpg/data' && \
+ssh sdw3 'rm -fr /var/local/whpg/data' && \
+ssh sdw2 'rm -fr /var/local/whpg/data' && \
+ssh sdw4 'rm -fr /var/local/whpg/data' && \
+rm -fr gpA*
 
 -->
 
