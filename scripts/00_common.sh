@@ -98,3 +98,7 @@ chown -R gpadmin: ~gpadmin
 
 # Configure kernel settings so the system is optimized for WarehousePG -------
 # sys.sh
+
+# OpenSSH server
+ssh-keygen -A. # generating new host keys
+/usr/sbin/sshd  # Start SSH service

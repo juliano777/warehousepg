@@ -56,3 +56,5 @@ DATA_DIRECTORY=${DATA_DIRECTORY}
 # Deve ser igual ao número de linhas no seu hostfile_gpinitsystem.
 MACHINE_SEGMENTS=3 # (Neste exemplo, assumindo 4 linhas no hostfile)
 EOF
+
+chown -R gpadmin: ~gpafmin

@@ -43,7 +43,7 @@ Initial tasks for all containers:
 for i in ${ALLSRV}; do
     # Container creation
     echo "--- ${i} ----------------------------------------------------------"
-    podman container run -itd --name ${i} --hostname ${i}.edb -p 5432 \
+    podman container run -itd --name ${i} --hostname ${i}.edb -p 5432 -p 22 \
         --network net_whpg almalinux:10
 
     # Copy scripts directory into the container
@@ -72,6 +72,19 @@ for i in ${WHPGCLSTR}; do
     # Exectute script to install dependencies and install the tarball content
     podman container exec -it ${i} sh -c '/tmp/scripts/02_nodes.sh'
 done
+```
+
+SSH
+```bash
+for i in ${WHPGCLSTR}; do
+    # Copy compiled WarehousePg tarball
+    podman container exec -itu gpadmin ${i} sh -c 'cat ~/.ssh/id_rsa.pub' | \
+        podman container exec -iu gpadmin masterdb \
+            sh -c 'cat >> ~/.ssh/authorized_keys'
+done
+
+
+
 ```
 
 
