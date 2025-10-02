@@ -35,7 +35,63 @@ dnf install -y epel-release
 dnf update -y
 
 # Install some packages
-dnf install -y neovim bash-completion procps-ng util-linux sudo
+dnf install -y neovim bash-completion procps-ng util-linux sudo openssh-server
+
+# gpadmin system user --------------------------------------------------------
+
+# Group creation
+groupadd -r gpadmin
+
+# User creation
+useradd \
+    -s /bin/bash \
+    -md /var/local/whpg \
+    -k /etc/skel \
+    -g gpadmin \
+    -G wheel \
+    -c 'Greenplum admin WarehousePG user' \
+    -r gpadmin
+
+# Generate SSH keys for gpadmin
+su - gpadmin -c "ssh-keygen -t rsa -b 4096 -P '' -f ~/.ssh/id_rsa"
+
+# WarehousePg variables
+cat << EOF > ~gpadmin/.whpg_vars
+# WarehousePg Home (installation directory)
+WHPG_HOME='/usr/local/whpg'
+
+# Library directories
+export LD_LIBRARY_PATH="\${WHPG_HOME}/lib:\${LD_LIBRARY_PATH}"
+
+# Manuals directories
+export MANPATH="\${WHPG_HOME}/man:\${MANPATH}"
+
+# Master directory
+export MASTER_DIRECTORY='/var/local/whpg/data/master'
+
+# Data directory
+DATA_DIRECTORY="/var/local/whpg/data/sdw1 /var/local/whpg/data/sdw2 \
+/var/local/whpg/data/sdw3'
+
+# DB port
+export PGPORT=5432
+
+# DB user
+export PGUSER=gpadmin
+
+# Database
+export PGDATABASE=gpadmin
+
+# Unset variables
+unset WHPG_HOME PGBIN
+EOF
+
+# New lines to profile script
+echo "source /usr/local/whpg/greenplum_path.sh" >> ~gpadmin/.bash_profile
+echo "source ~/.whpg_vars" >> ~gpadmin/.bash_profile
+
+# Set ownership
+chown -R gpadmin: ~gpadmin
 
 # Configure kernel settings so the system is optimized for WarehousePG -------
 mkdir /etc/sysctl.d 2> /dev/null
@@ -117,59 +173,3 @@ ulimit -n 65536 65536
 
 # Deactivate or Configure Firewall Software
 systemctl disable --now firewalld
-
-# gpadmin system user --------------------------------------------------------
-
-# Group creation
-groupadd -r gpadmin
-
-# User creation
-useradd \
-    -s /bin/bash \
-    -md /var/local/whpg \
-    -k /etc/skel \
-    -g gpadmin \
-    -G wheel \
-    -c 'Greenplum admin WarehousePG user' \
-    -r gpadmin
-
-# Generate SSH keys for gpadmin
-su - gpadmin -c "ssh-keygen -t rsa -b 4096 -P '' -f ~/.ssh/id_rsa"
-
-# WarehousePg variables
-cat << EOF > ~gpadmin/.whpg_vars
-# WarehousePg Home (installation directory)
-WHPG_HOME='/usr/local/whpg'
-
-# Library directories
-export LD_LIBRARY_PATH="\${WHPG_HOME}/lib:\${LD_LIBRARY_PATH}"
-
-# Manuals directories
-export MANPATH="\${WHPG_HOME}/man:\${MANPATH}"
-
-# Master directory
-export MASTER_DIRECTORY='/var/local/whpg/data/master'
-
-# Data directory
-DATA_DIRECTORY="/var/local/whpg/data/sdw1 /var/local/whpg/data/sdw2 \
-/var/local/whpg/data/sdw3'
-
-# DB port
-export PGPORT=5432
-
-# DB user
-export PGUSER=gpadmin
-
-# Database
-export PGDATABASE=gpadmin
-
-# Unset variables
-unset WHPG_HOME PGBIN
-EOF
-
-# New lines to profile script
-echo "source /usr/local/whpg/greenplum_path.sh" >> ~gpadmin/.bash_profile
-echo "source ~/.whpg_vars" >> ~gpadmin/.bash_profile
-
-# Set ownership
-chown -R gpadmin: ~gpadmin
