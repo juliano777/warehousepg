@@ -137,7 +137,7 @@ useradd \
 su - tux -c "ssh-keygen -t rsa -b 4096 -P '' -f ~/.ssh/id_rsa"
 
 # WarehousePg variables
-cat << EOF > ~gpafmin/.whpg_vars
+cat << EOF > ~gpadmin/.whpg_vars
 # WarehousePg Home (installation directory)
 WHPG_HOME='/usr/local/whpg'
 
@@ -168,5 +168,5 @@ unset WHPG_HOME PGBIN
 EOF
 
 # New lines to profile script
-echo "source /usr/local/whpg/greenplum_path.sh" >> ~gpafmin/.bash_profile
-echo "source ~/.whpg_vars" >> ~gpafmin/.bash_profile
+echo "source /usr/local/whpg/greenplum_path.sh" >> ~gpadmin/.bash_profile
+echo "source ~/.whpg_vars" >> ~gpadmin/.bash_profile
