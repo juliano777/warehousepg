@@ -35,7 +35,7 @@ dnf install -y epel-release
 dnf update -y
 
 # Install some packages
-dnf install -y neovim bash-completion procps-ng
+dnf install -y neovim bash-completion procps-ng util-linux
 
 # Configure kernel settings so the system is optimized for WarehousePG -------
 mkdir /etc/sysctl.d 2> /dev/null
