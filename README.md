@@ -34,7 +34,7 @@ Environment variables regarding servers / containers:
 # Compiler container
 CMPCT='compiler'
 MSTRDB='masterdb'
-WHPGCLSTR="${MSTRDB}$ sdw1 sdw2 sdw3 sdw4"
+WHPGCLSTR="${MSTRDB} sdw1 sdw2 sdw3 sdw4"
 ALLSRV="${CMPCT} ${WHPGCLSTR}"
 ```
 
@@ -42,6 +42,7 @@ Initial tasks for all containers:
 ```bash
 for i in ${ALLSRV}; do
     # Container creation
+    echo "--- ${i} ----------------------------------------------------------"
     podman container run -itd --name ${i} --hostname ${i}.edb -p 5432 \
         --network net_whpg almalinux:10
 
@@ -49,10 +50,10 @@ for i in ${ALLSRV}; do
     podman container cp scripts ${i}:/tmp/
 
     # Make all scripts executable
-    podman container exec -it ${i} chmod +x /tmp/scripts/*
+    podman container exec -it ${i} sh -c 'chmod +x /tmp/scripts/*'
 
     # Perform all common tasks
-    podman container exec -it ${i} /tmp/00_common.sh
+    podman container exec -it ${i} sh -c '/tmp/scripts/00_common.sh'
 
 done
 ```

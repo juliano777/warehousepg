@@ -25,6 +25,9 @@ update-alternatives --set python ${PYTHON}
 
 # Packages -------------------------------------------------------------------
 
+# Disable SSL repositories
+echo 'sslverify=False' >> /etc/dnf/dnf.conf
+
 # EPEL repository
 dnf install -y epel-release
 
