@@ -8,13 +8,20 @@ python${PYTHON_VERSON}-devel python3-psutil python${PYTHON_VERSON}-pip \
 perl-ExtUtils-MakeMaker.noarch perl-ExtUtils-Embed.noarch \
 readline-devel rsync xerces-c-devel zlib-devel python3-psutil python3-pyyaml \
 python3-psycopg2 perl perl-interpreter libyaml-devel libuuid-devel \
-cyrus-sasl cyrus-sasl-devel openldap-devel postgresql postgresql-devel"
+cyrus-sasl cyrus-sasl-devel openldap-devel postgresql postgresql-devel git"
 
 # Install development tools
 dnf group install -y "Development Tools"
 
 # Install packages
 dnf install -y ${PKG} && dnf clean all
+
+# Clone WarehousePg repository
+git -c http.sslVerify=false clone \
+    https://github.com/warehouse-pg/warehouse-pg.git
+
+# Access the repository directory
+cd warehouse-pg
 
 # Flags for compilation
 export CFLAGS="-Wno-error -O2"

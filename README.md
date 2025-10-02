@@ -60,7 +60,7 @@ done
 
 Conpilation:
 ```bash
-podman container exec -it ${i} /tmp/01_compilation.sh
+podman container exec -it ${CMPCT} /tmp/scripts/01_compilation.sh
 ```
 
 
