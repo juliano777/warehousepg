@@ -100,5 +100,5 @@ chown -R gpadmin: ~gpadmin
 # sys.sh
 
 # OpenSSH server
-ssh-keygen -A. # generating new host keys
+ssh-keygen -A  # generating new host keys
 /usr/sbin/sshd  # Start SSH service
