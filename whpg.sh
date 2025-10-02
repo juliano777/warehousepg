@@ -1,37 +1,15 @@
 # === Compilation
 
-# Python
-update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
-update-alternatives --install /usr/bin/python3 python /usr/bin/python3.12 1
-update-alternatives --set python3 /usr/bin/python3.12
-update-alternatives --set python /usr/bin/python3.12
-
-export PYTHON='/usr/bin/python3.12'
-
-dnf install -y epel-release
-dnf update -y
-
-dnf group install -y "Development Tools"
-
-export PKG="apr-devel bison bzip2-devel cmake3 flex gcc gcc-c++ krb5-devel \
-libcurl-devel libevent-devel libkadm5 libxml2-devel libzstd-devel \
-openssl-devel python3.12 python3-devel python3.12-devel python3-psutil \
-python3.12-pip perl-ExtUtils-MakeMaker.noarch perl-ExtUtils-Embed.noarch \
-readline-devel rsync xerces-c-devel zlib-devel python3-psutil python3-pyyaml \
-python3-psycopg2 perl perl-interpreter libyaml-devel libuuid-devel \
-cyrus-sasl cyrus-sasl-devel openldap-devel postgresql postgresql-devel"
-
-dnf install -y ${PKG} && dnf clean all
 
 
-CFLAGS="-Wno-error -O2" CXXFLAGS="-std=c++17 -Wno-error" \
-    ./configure --prefix=/usr/local/whpg
 
-make
 
-make install
 
-tar cvf /tmp/whpg.tar /usr/local/whpg
+
+
+
+
+
 
 
 
@@ -74,15 +52,11 @@ EOF
 
 
 
-#
-su - gpadmin
 
-#
-ssh-keygen -t rsa -b 4096 -P '' -f ~/.ssh/id_rsa
 
-# 
-cat << EOF > ~/.whpg_vars
-# 
+# WarehousePg variables
+cat << EOF > ~gpafmin/.whpg_vars
+# WarehousePg Home (installation directory)
 WHPG_HOME='/usr/local/whpg'
 
 # Library directories
@@ -91,16 +65,16 @@ export LD_LIBRARY_PATH="\${WHPG_HOME}/lib:\${LD_LIBRARY_PATH}"
 # Manuals directories
 export MANPATH="\${WHPG_HOME}/man:\${MANPATH}"
 
-# PostgreSQL data directory
+# Data directory
 export PGDATA='/var/local/whpg/data'
 
-#
+# DB port
 export PGPORT=5432
 
-#
+# DB user
 export PGUSER=gpadmin
 
-#
+# Database
 export PGDATABASE=gpadmin
 
 # Unset variables
@@ -109,18 +83,18 @@ EOF
 
 
 # 
-echo "source /usr/local/whpg/greenplum_path.sh" >> ~/.bash_profile
-echo "source ~/.whpg_vars" >> ~/.bash_profile
+echo "source /usr/local/whpg/greenplum_path.sh" >> ~gpafmin/.bash_profile
+echo "source ~/.whpg_vars" >> ~gpafmin/.bash_profile
 
 # 
-cat << EOF > ~/hostfile_gpinitsystem
+cat << EOF > ~gpafmin/hostfile_gpinitsystem
 sdw1
 sdw2
 sdw3
 EOF
 
 # 
-cat << EOF > ~/gpinitsystem_config
+cat << EOF > ~gpafmin/gpinitsystem_config
 # #####################################################################
 # CONFIGURAÇÃO GERAL
 # #####################################################################
@@ -137,7 +111,7 @@ BASE_PORT=40000
 
 # O ID do Master. Use 0 para sistemas de teste.
 MASTER_ARRAY_HOST=0
-MASTER_PORT=5432 # A porta do Master no seu host (pode ser a 5432 padrão ou outra)
+MASTER_PORT=${PGPORT} # A porta do Master no seu host (pode ser a 5432 padrão ou outra)
 
 # Prefixo para os diretórios de dados. Cada segmento terá um diretório
 # com este prefixo seguido de um número. Ex: /data/gpseg0, /data/gpseg1

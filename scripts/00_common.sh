@@ -1,27 +1,40 @@
 #!/bin/bash
 
-PKG="python3.12 python3.12-devel python3.12-psycopg2 python3.12-pyyaml \
-python3.12-psutil neovim procps-ng apr apr-util bash bzip2 curl krb5 \
-libcurl libevent libxml2 libyaml zlib openldap openssh openssl openssl-libs \
-perl readline rsync R sed tar zip"
+# Python ---------------------------------------------------------------------
+# Set Python version
+export PYTHON_VERSON='3.12'
 
-/usr/bin/echo 'sslverify=0' >> /etc/dnf/dnf.conf
+# Python binary
+export PYTHON="/usr/bin/python${PYTHON_VERSON}"
 
-/usr/bin/dnf install -y epel-release
+# Profile script
+cat << EOF > /etc/profile.d/python.sh 
+# Python environment variables
+export PYTHON_VERSON='${PYTHON}'
 
-/usr/bin/dnf update -y
+# Python binary
+export PYTHON='/usr/bin/python${PYTHON_VERSON}'
 
-tar xf /tmp/whpg.tar.xz -C /
+EOF
 
-dnf install -y ${PKG}
+# Update alternatives
+update-alternatives --install /usr/bin/python3 python3 ${PYTHON} 1
+update-alternatives --install /usr/bin/python3 python ${PYTHON} 1
+update-alternatives --set python3 ${PYTHON}
+update-alternatives --set python ${PYTHON}
 
-update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
-update-alternatives --install /usr/bin/python3 python /usr/bin/python3.12 1
-update-alternatives --set python3 /usr/bin/python3.12
-update-alternatives --set python /usr/bin/python3.12
+# Packages -------------------------------------------------------------------
 
+# EPEL repository
+dnf install -y epel-release
 
-# Configure kernel settings so the system is optimized for WarehousePG.
+# Update the system
+dnf update -y
+
+# Install some packages
+dnf install -y neovim bash-completion procps-ng
+
+# Configure kernel settings so the system is optimized for WarehousePG -------
 mkdir /etc/sysctl.d 2> /dev/null
 touch /etc/sysctl.conf
 
@@ -113,3 +126,6 @@ useradd \
     -G wheel \
     -c 'Greenplum admin WarehousePG user' \
     -r gpadmin
+
+# Generate SSH keys for gpadmin
+su - tux -c "ssh-keygen -t rsa -b 4096 -P '' -f ~/.ssh/id_rsa"
