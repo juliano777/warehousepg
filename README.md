@@ -1,5 +1,18 @@
 # WarehousePg tutorial (Podman)
 
+## About the lab environment
+
+| **Role**                                      | **hostname** | **IP address** |
+|-----------------------------------------------|--------------|----------------|
+| Compiler (temp)                               | compiler     | 192.168.56.99  |
+| Master (coordinator)                          | masterdb     | 192.168.56.70  |
+| Segment host 1                                | sdw1         | 192.168.56.71  |
+| Segment host 2                                | sdw2         | 192.168.56.72  |
+| Segment host 3                                | sdw3         | 192.168.56.73  |
+| Segment host 4 (initially out of the cluster) | sdw4         | 192.168.56.74  |
+
+
+
 
 ## Clone this repository
 
