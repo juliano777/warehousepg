@@ -22,9 +22,12 @@ MASTER_ARRAY_HOST=0
 COORDINATOR_PORT=${PGPORT}
 SEG_PREFIX=gpseg
 MASTER_DIRECTORY=${MASTER_DIRECTORY}
-DATA_DIRECTORY='${DATA_DIRECTORY}'
 MACHINE_SEGMENTS=3
 EOF
+
+for i in ${DATA_DIRECTORY}; do
+    echo "DATA_DIRECTORY='${i}'" >> ~gpadmin/gpinitsystem_config
+done
 
 # libxerces-c-3.2.so
 
