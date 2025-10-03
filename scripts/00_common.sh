@@ -37,7 +37,7 @@ dnf update -y
 #
 PKG="xerces-c neovim bash-completion procps-ng util-linux sudo \
 openssh-clients openssh-server iproute rsync python3-psycopg2 \
-python3-pyyaml python3-psutil"
+python3-pyyaml python3-psutil python3-setuptools"
 
 # Install some packages
 dnf install -y ${PKG}

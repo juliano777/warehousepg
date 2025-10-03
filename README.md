@@ -109,6 +109,24 @@ podman container exec -itu gpadmin masterdb \
     sh -c 'source ~/.whpg_vars && /tmp/scripts/03_masterdb.sh'
 ```
 
+
+
+MasterDB node; a script reset:
+```bash
+cat << EOF > reset.sh && chmod +x reset.sh
+#!/bin/bash
+
+rm -fr /var/local/whpg/{data,gpAdminLogs} && mkdir -p /var/local/whpg/data/sdw{1,2,3}
+mkdir /var/local/whpg/data/master
+ssh sdw1 'rm -fr /var/local/whpg/data && mkdir -p /var/local/whpg/data/sdw{1,2,3}'
+ssh sdw2 'rm -fr /var/local/whpg/data && mkdir -p /var/local/whpg/data/sdw{1,2,3}'
+ssh sdw3 'rm -fr /var/local/whpg/data && mkdir -p /var/local/whpg/data/sdw{1,2,3}'
+gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem -a
+
+EOF
+```
+
+
         
 <!--
 
