@@ -55,10 +55,10 @@ for i in ${ALLSRV}; do
     scp -r scripts tux@${i}:/tmp/
 
     # Make all scripts executable
-    ssh tux@${i} sh -c 'chmod +x /tmp/scripts/*'
+    ssh tux@${i} 'chmod +x /tmp/scripts/*'
 
     # Perform all common tasks
-    ssh tux@${i} sh -c 'sudo /tmp/scripts/00_common.sh'
+    ssh tux@${i} 'sudo /tmp/scripts/00_common.sh'
 
 done
 ```
@@ -79,7 +79,7 @@ for i in ${WHPGCLSTR}; do
     scp /tmp/whpg.tar.xz ${i}:/tmp/
 
     # Exectute script to install dependencies and install the tarball content
-    ssh tux@${i} sh -c 'sudo /tmp/scripts/02_nodes.sh'
+    ssh tux@${i} 'sudo /tmp/scripts/02_nodes.sh'
 done
 ```
 
@@ -91,7 +91,7 @@ for i in ${WHPGCLSTR}; do
 
 
 
-    
+
 
     podman server exec -itu gpadmin masterdb sh -c 'cat ~/.ssh/id_rsa.pub' | \
         podman server exec -iu gpadmin ${i} \
