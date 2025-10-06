@@ -32,59 +32,50 @@ HHTPS
 git clone https://github.com/juliano777/warehousepg.git && cd warehousepg/
 ```
 
-
-
-Network creation:
+Environment variables regarding servers / servers:
 ```bash
-podman network create net_whpg
+ CMPLR='192.168.56.99'  # Compiler machine
+ MSTRDB='192.168.56.70'  # Master (coordinator)
+ SEGNODES='192.168.56.71 192.168.56.72 192.168.56.73 192.168.56.74'
+ WHPGCLSTR="${MSTRDB} ${SEGNODES}"
+ ALLSRV="${CMPLR} ${WHPGCLSTR}"
 ```
 
-Environment variables regarding servers / containers:
-```bash
-CMPCT='compiler'  # Compiler container
-MSTRDB='masterdb'  # Master (coordinator)
-SEGNODES='sdw1 sdw2 sdw3 sdw4'
-WHPGCLSTR="${MSTRDB} ${SEGNODES}"
-ALLSRV="${CMPCT} ${WHPGCLSTR}"
-```
-
-Initial tasks for all containers:
+Copy local public SSH key to each server (user `tux`):
 ```bash
 for i in ${ALLSRV}; do
-    # Container creation
-    echo "--- ${i} ----------------------------------------------------------"
-    podman container run -itd \
-        --cap-add=NET_RAW  \
-        --name ${i} \
-        --hostname ${i}.edb \
-        -p 5432 -p 22 \
-        --network net_whpg almalinux:10
+    ssh-copy-id tux@${i}
+done
+```
 
-    # Copy scripts directory into the container
-    podman container cp scripts ${i}:/tmp/
+Initial tasks for all servers:
+```bash
+for i in ${ALLSRV}; do
+    # Copy scripts directory into the server
+    scp -r scripts tux@${i}:/tmp/
 
     # Make all scripts executable
-    podman container exec -it ${i} sh -c 'chmod +x /tmp/scripts/*'
+    ssh tux@${i} sh -c 'chmod +x /tmp/scripts/*'
 
     # Perform all common tasks
-    podman container exec -it ${i} sh -c '/tmp/scripts/00_common.sh'
+    ssh tux@${i} sh -c '/tmp/scripts/00_common.sh'
 
 done
 ```
 
 Conpilation:
 ```bash
-podman container exec -it ${CMPCT} /tmp/scripts/01_compilation.sh
+ssh tux@${CMPLR} /tmp/scripts/01_compilation.sh
 ```
 
 WarehoousePG tarball installation on nodes:
 ```bash
 for i in ${WHPGCLSTR}; do
     # Copy compiled WarehousePg tarball
-    podman container cp compiler:/tmp/whpg.tar.xz ${i}:/tmp/
+     compiler:/tmp/whpg.tar.xz ${i}:/tmp/
 
     # Exectute script to install dependencies and install the tarball content
-    podman container exec -it ${i} sh -c '/tmp/scripts/02_nodes.sh'
+    ssh tux@${i} sh -c '/tmp/scripts/02_nodes.sh'
 done
 ```
 
@@ -92,12 +83,12 @@ SSH:
 ```bash
 for i in ${WHPGCLSTR}; do
     # Add Master SSH key (gpadmin user) to segment nodes
-    podman container exec -itu gpadmin masterdb sh -c 'cat ~/.ssh/id_rsa.pub' | \
-        podman container exec -iu gpadmin ${i} \
+    podman server exec -itu gpadmin masterdb sh -c 'cat ~/.ssh/id_rsa.pub' | \
+        podman server exec -iu gpadmin ${i} \
             sh -c 'cat >> ~/.ssh/authorized_keys'
 
     # Allow hosts automatically
-    podman container exec -u gpadmin masterdb \
+    podman server exec -u gpadmin masterdb \
         sh -c "ssh -o StrictHostKeyChecking=no ${i}"
 
 done
@@ -106,11 +97,11 @@ done
 Cluster nodes:
 ```bash
 for i in ${WHPGCLSTR}; do
-    podman container exec -u gpadmin ${i} \
+    podman server exec -u gpadmin ${i} \
         sh -c 'source ~/.whpg_vars && mkdir -p ${DATA_DIRECTORY}'
 
     if [ ${i} == ${MSTRDB} ]; then
-        podman container exec -u gpadmin ${i} sh -c "source ~/.whpg_vars && \
+        podman server exec -u gpadmin ${i} sh -c "source ~/.whpg_vars && \
             mkdir -p  \${MASTER_DIRECTORY}"
     fi
 done
@@ -118,7 +109,7 @@ done
 
 Master:
 ```bash
-podman container exec -itu gpadmin masterdb \
+podman server exec -itu gpadmin masterdb \
     sh -c 'source ~/.whpg_vars && /tmp/scripts/03_masterdb.sh'
 ```
 

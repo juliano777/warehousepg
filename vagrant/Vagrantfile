@@ -1,39 +1,77 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.configure("2") do |config|
-  # Base box to use for all VMs
+# Vagrant configuration for WarehousePg cluster
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Base box for all machines
   config.vm.box = "rockylinux/10"
 
-  # Common settings applied to all VMs
+  # Default SSH configuration (use Vagrant's own user to start)
+  config.ssh.insert_key = false
+
+  # Global provider configuration
   config.vm.provider "virtualbox" do |vb|
     vb.cpus = 2
     vb.memory = 2048
   end
 
-  # Define a helper function for creating VMs
-  def create_vm(config, name, hostname, ip)
+  # Helper to define VMs
+  def define_vm(config, name, hostname, ip)
     config.vm.define name do |node|
-      # Set VM hostname
       node.vm.hostname = hostname
-
-      # Second network interface (host-only)
       node.vm.network "private_network", ip: ip
 
-      # Assign each VM to the same VirtualBox group
       node.vm.provider "virtualbox" do |vb|
-        vb.name = name
-        vb.customize ["modifyvm", :id, "--groups", "/WarehousePg"]
+        vb.name = "WarehousePg-#{name}"
       end
+
+      # Provision user 'tux' and set up SSH access
+      node.vm.provision "shell", inline: <<-SHELL
+        #!/bin/bash
+        set -e
+
+        # Create user tux if missing
+        if ! id tux &>/dev/null; then
+          useradd -m -s /bin/bash tux
+        fi
+
+        # Add to sudoers (no password)
+        echo "tux ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/tux
+        chmod 440 /etc/sudoers.d/tux
+
+        # Create .ssh folder for tux
+        mkdir -p /home/tux/.ssh
+        chmod 700 /home/tux/.ssh
+
+        # Copy Vagrant public key so SSH works directly
+        if [ -f /home/vagrant/.ssh/authorized_keys ]; then
+          cp /home/vagrant/.ssh/authorized_keys /home/tux/.ssh/authorized_keys
+        else
+          echo "No Vagrant authorized_keys found; generating fallback key..."
+          ssh-keygen -t rsa -b 2048 -N '' -f /home/tux/.ssh/id_rsa
+          cat /home/tux/.ssh/id_rsa.pub > /home/tux/.ssh/authorized_keys
+        fi
+
+        chown -R tux:tux /home/tux/.ssh
+        chmod 600 /home/tux/.ssh/authorized_keys
+        
+        # 
+        sudo rm -f /etc/ssh/sshd_config.d/05-vagrant.conf
+        sudo systemctl restart sshd
+        sudo echo 'tux:123' | chpasswd
+        echo 'User tux is ready with SSH access.'
+      SHELL
     end
   end
 
-  # Create the VMs
-  create_vm(config, "compiler", "compiler.my.domain", "192.168.56.99")
-  create_vm(config, "masterdb", "masterdb.my.domain", "192.168.56.70")
-  create_vm(config, "sdw1", "sdw1.my.domain", "192.168.56.71")
-  create_vm(config, "sdw2", "sdw2.my.domain", "192.168.56.72")
-  create_vm(config, "sdw3", "sdw3.my.domain", "192.168.56.73")
-  create_vm(config, "sdw4", "sdw4.my.domain", "192.168.56.74")
+  # Define the 6 VMs
+  define_vm(config, "compiler", "compiler.my.domain", "192.168.56.99")
+  define_vm(config, "masterdb", "masterdb.my.domain", "192.168.56.70")
+  define_vm(config, "sdw1", "sdw1.my.domain", "192.168.56.71")
+  define_vm(config, "sdw2", "sdw2.my.domain", "192.168.56.72")
+  define_vm(config, "sdw3", "sdw3.my.domain", "192.168.56.73")
+  define_vm(config, "sdw4", "sdw4.my.domain", "192.168.56.74")
 end
 
