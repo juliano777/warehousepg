@@ -1,8 +1,19 @@
 #!/bin/bash
 
+# Update the system ----------------------------------------------------------
+
+# EPEL repository
+dnf install -y epel-release
+
+# Update the system
+dnf update -y
+
 # Python ---------------------------------------------------------------------
 # Set Python version
 export PYTHON_VERSON='3.12'
+
+# Install Python
+dnf install -y python${PYTHON_VERSON}
 
 # Python binary
 export PYTHON="/usr/bin/python${PYTHON_VERSON}"
@@ -25,29 +36,13 @@ update-alternatives --set python ${PYTHON}
 
 # Packages -------------------------------------------------------------------
 
-# Disable SSL repositories
-echo 'sslverify=False' >> /etc/dnf/dnf.conf
-
-# EPEL repository
-dnf install -y epel-release
-
-# Update the system
-dnf update -y
-
-#
+# 
 PKG="xerces-c neovim bash-completion procps-ng util-linux sudo \
 openssh-clients openssh-server iproute rsync python3-psycopg2 \
 python3-pyyaml python3-psutil python3-setuptools"
 
-# Install some packages
-dnf install -y ${PKG}
-
-# 
-# chmod u+s /usr/bin/ping
-setcap cap_net_raw+ep /usr/bin/ping
-
-# Clear downloaded packages
-dnf clean all
+# Install some packages and clear downloaded packages
+dnf install -y ${PKG} && dnf clean all
 
 # gpadmin system user --------------------------------------------------------
 
@@ -106,13 +101,6 @@ echo "source ~/.whpg_vars" >> ~gpadmin/.bash_profile
 chown -R gpadmin: ~gpadmin
 
 # Configure kernel settings so the system is optimized for WarehousePG -------
-# sys.sh
-
-# OpenSSH server
-ssh-keygen -A  # generating new host keys
-/usr/sbin/sshd  # Start SSH service
-
-# ============================================================================
 tee -a /etc/sysctl.d/10-whpg.conf << EOF
 kernel.msgmax = 65536
 kernel.msgmnb = 65536
@@ -155,9 +143,11 @@ EOF
 
 RAM_IN_KB=`cat /proc/meminfo | grep MemTotal | awk '{print $2}'`
 RAM_IN_BYTES=$(($RAM_IN_KB*1024))
+
 echo "vm.min_free_kbytes = $(($RAM_IN_BYTES*3/100/1024))" | tee -a /etc/sysctl.d/10-whpg.conf > /dev/null
 echo "kernel.shmall = $(($RAM_IN_BYTES/2/4096))" | tee -a /etc/sysctl.d/10-whpg.conf > /dev/null
 echo "kernel.shmmax = $(($RAM_IN_BYTES/2))" | tee -a /etc/sysctl.d/10-whpg.conf > /dev/null
+
 if [ $RAM_IN_BYTES -le $((64*1024*1024*1024)) ]; then
     echo "vm.dirty_background_ratio = 3" | tee -a /etc/sysctl.d/10-whpg.conf > /dev/null
     echo "vm.dirty_ratio = 10" | tee -a /etc/sysctl.d/10-whpg.conf > /dev/null
