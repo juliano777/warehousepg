@@ -13,6 +13,10 @@ cyrus-sasl cyrus-sasl-devel openldap-devel postgresql postgresql-devel git"
 # Install development tools
 dnf group install -y "Development Tools"
 
+# Enable the "PowerTools" (now known as CRB - CodeReady Builder) repository:
+dnf install dnf-plugins-core
+dnf config-manager --set-enabled crb
+
 # Install packages
 dnf install -y ${PKG} && dnf clean all
 
@@ -24,14 +28,22 @@ git -c http.sslVerify=false clone \
 cd warehouse-pg
 
 # Flags for compilation
-export CFLAGS="-Wno-error -O2"
-export CXXFLAGS="-std=c++17 -Wno-error"
+CPPFLAGS="-DLINUX_OOM_SCORE_ADJ=0"
+
+NJOBS=`expr \`nproc\` + 1`
+
+MAKEOPTS="-j${NJOBS}"
+
+CHOST="x86_64-unknown-linux-gnu"
+
+CFLAGS='-O2 -pipe -march=native -Wno-maybe-uninitialized -Wno-error'
+CXXFLAGS="$CFLAGS"
 
 # Configure (pre compilation)
 ./configure --prefix=/usr/local/whpg
 
 # Compilation
-make
+make world
 
 # Install to configured directory
 make install
