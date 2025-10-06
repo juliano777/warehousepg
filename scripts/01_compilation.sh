@@ -13,8 +13,7 @@ cyrus-sasl cyrus-sasl-devel openldap-devel git"
 dnf group install -y "Development Tools"
 
 # Enable the "PowerTools" (now known as CRB - CodeReady Builder) repository:
-dnf install dnf-plugins-core
-dnf config-manager --set-enabled crb
+dnf config-manager --set-enabled powertools
 
 # Install packages
 dnf install -y ${PKG} && dnf clean all
