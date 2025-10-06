@@ -3,11 +3,10 @@
 # Packages required for compilation
 export PKG="apr-devel bison bzip2-devel cmake3 flex gcc gcc-c++ krb5-devel \
 libcurl-devel libevent-devel libkadm5 libxml2-devel libzstd-devel \
-openssl-devel python${PYTHON_VERSON} python3-devel \
-python${PYTHON_VERSON}-devel python3-psutil python${PYTHON_VERSON}-pip \
-perl-ExtUtils-MakeMaker.noarch perl-ExtUtils-Embed.noarch \
-readline-devel rsync xerces-c-devel zlib-devel python3-psutil \
-perl perl-interpreter libyaml-devel libuuid-devel \
+openssl-devel python3-devel python${PYTHON_VERSON}-devel python3-psutil \
+python${PYTHON_VERSON}-pip perl-ExtUtils-MakeMaker.noarch \
+perl-ExtUtils-Embed.noarch readline-devel rsync xerces-c-devel zlib-devel \
+python3-psutil perl perl-interpreter libyaml-devel libuuid-devel \
 cyrus-sasl cyrus-sasl-devel openldap-devel postgresql postgresql-devel git"
 
 # Install development tools
@@ -21,8 +20,7 @@ dnf config-manager --set-enabled crb
 dnf install -y ${PKG} && dnf clean all
 
 # Clone WarehousePg repository
-git -c http.sslVerify=false clone \
-    https://github.com/warehouse-pg/warehouse-pg.git
+git clone https://github.com/warehouse-pg/warehouse-pg.git
 
 # Access the repository directory
 cd warehouse-pg
@@ -36,9 +34,11 @@ MAKEOPTS="-j${NJOBS}"
 
 CHOST="x86_64-unknown-linux-gnu"
 
+"
 CFLAGS='-O2 -pipe -march=native -Wno-maybe-uninitialized -Wno-error'
 CFLAGS='-O2 -pipe -march=native -Wno-error -Wno-maybe-uninitialized'
 CXXFLAGS='-Wno-error'
+"
 
 # Configure (pre compilation)
 ./configure --prefix=/usr/local/whpg
