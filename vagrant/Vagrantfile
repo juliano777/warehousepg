@@ -6,7 +6,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Base box for all machines
-  config.vm.box = "rockylinux/8"
+  config.vm.box = "almalinux/8"
 
   # Default SSH configuration (use Vagrant's own user to start)
   config.ssh.insert_key = false
