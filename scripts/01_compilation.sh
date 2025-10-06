@@ -7,7 +7,7 @@ openssl-devel python3-devel python${PYTHON_VERSON}-devel python3-psutil \
 python${PYTHON_VERSON}-pip perl-ExtUtils-MakeMaker.noarch \
 perl-ExtUtils-Embed.noarch readline-devel rsync xerces-c-devel zlib-devel \
 python3-psutil perl perl-interpreter libyaml-devel libuuid-devel \
-cyrus-sasl cyrus-sasl-devel openldap-devel postgresql postgresql-devel git"
+cyrus-sasl cyrus-sasl-devel openldap-devel git"
 
 # Install development tools
 dnf group install -y "Development Tools"
