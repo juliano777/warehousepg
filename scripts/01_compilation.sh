@@ -13,7 +13,7 @@ cyrus-sasl cyrus-sasl-devel openldap-devel git"
 dnf group install -y "Development Tools"
 
 # Enable the "PowerTools" (now known as CRB - CodeReady Builder) repository:
-dnf config-manager --set-enabled powertools
+dnf config-manager --set-enabled crb
 
 # Install packages
 dnf install -y ${PKG} && dnf clean all
@@ -40,7 +40,7 @@ CXXFLAGS='-Wno-error'
 "
 
 # Configure (pre compilation)
-./configure --prefix=/usr/local/whpg
+./configure --prefix=/usr/local/whpg --with-python
 
 # Compilation
 make world

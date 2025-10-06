@@ -59,7 +59,6 @@ for i in ${ALLSRV}; do
 
     # Perform all common tasks
     ssh tux@${i} 'sudo /tmp/scripts/00_common.sh'
-
 done
 ```
 
@@ -69,14 +68,14 @@ Conpilation:
 ssh tux@${CMPLR} 'sudo /tmp/scripts/01_compilation.sh'
 
 # 
-scp tux@compiler:/tmp/whpg.tar.xz /tmp/
+scp tux@${CMPLR}:/tmp/whpg.tar.xz /tmp/
 ```
 
 WarehoousePG tarball installation on nodes:
 ```bash
 for i in ${WHPGCLSTR}; do
     # Copy compiled WarehousePg tarball
-    scp /tmp/whpg.tar.xz ${i}:/tmp/
+    scp /tmp/whpg.tar.xz tux@${i}:/tmp/
 
     # Exectute script to install dependencies and install the tarball content
     ssh tux@${i} 'sudo /tmp/scripts/02_nodes.sh'
