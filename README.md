@@ -58,24 +58,28 @@ for i in ${ALLSRV}; do
     ssh tux@${i} sh -c 'chmod +x /tmp/scripts/*'
 
     # Perform all common tasks
-    ssh tux@${i} sh -c '/tmp/scripts/00_common.sh'
+    ssh tux@${i} sh -c 'sudo /tmp/scripts/00_common.sh'
 
 done
 ```
 
 Conpilation:
 ```bash
-ssh tux@${CMPLR} /tmp/scripts/01_compilation.sh
+# 
+ssh tux@${CMPLR} 'sudo /tmp/scripts/01_compilation.sh'
+
+# 
+scp tux@compiler:/tmp/whpg.tar.xz /tmp/
 ```
 
 WarehoousePG tarball installation on nodes:
 ```bash
 for i in ${WHPGCLSTR}; do
     # Copy compiled WarehousePg tarball
-     compiler:/tmp/whpg.tar.xz ${i}:/tmp/
+    scp /tmp/whpg.tar.xz ${i}:/tmp/
 
     # Exectute script to install dependencies and install the tarball content
-    ssh tux@${i} sh -c '/tmp/scripts/02_nodes.sh'
+    ssh tux@${i} sh -c 'sudo /tmp/scripts/02_nodes.sh'
 done
 ```
 
@@ -83,6 +87,12 @@ SSH:
 ```bash
 for i in ${WHPGCLSTR}; do
     # Add Master SSH key (gpadmin user) to segment nodes
+    ssh tux@masterdb 'sudo cat ~gpadmin/.ssh/id_rsa.pub'
+
+
+
+    
+
     podman server exec -itu gpadmin masterdb sh -c 'cat ~/.ssh/id_rsa.pub' | \
         podman server exec -iu gpadmin ${i} \
             sh -c 'cat >> ~/.ssh/authorized_keys'
