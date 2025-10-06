@@ -37,6 +37,7 @@ MAKEOPTS="-j${NJOBS}"
 CHOST="x86_64-unknown-linux-gnu"
 
 CFLAGS='-O2 -pipe -march=native -Wno-maybe-uninitialized -Wno-error'
+CFLAGS='-O2 -pipe -march=native -Wno-error -Wno-maybe-uninitialized'
 CXXFLAGS='-Wno-error'
 
 # Configure (pre compilation)
