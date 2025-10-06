@@ -44,7 +44,7 @@ Environment variables regarding servers / servers:
 Copy local public SSH key to each server (user `tux`):
 ```bash
 for i in ${ALLSRV}; do
-    ssh-copy-id tux@${i}
+    ssh-copy-id -o StrictHostKeyChecking=no tux@${i}
 done
 ```
 
