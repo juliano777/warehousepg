@@ -86,19 +86,13 @@ SSH:
 ```bash
 for i in ${WHPGCLSTR}; do
     # Add Master SSH key (gpadmin user) to segment nodes
-    ssh tux@masterdb 'sudo cat ~gpadmin/.ssh/id_rsa.pub'
-
-
-
-
-
-    podman server exec -itu gpadmin masterdb sh -c 'cat ~/.ssh/id_rsa.pub' | \
-        podman server exec -iu gpadmin ${i} \
-            sh -c 'cat >> ~/.ssh/authorized_keys'
+    CMD="sudo bash -c \
+        'cat >> ~gpadmin/.ssh/authorized_keys && chown -R gpadmin: ~gpadmin/.ssh'" 
+    ssh tux@192.168.56.70 'sudo cat ~gpadmin/.ssh/id_rsa.pub' | \
+        ssh tux@192.168.56.71 "${CMD}"
 
     # Allow hosts automatically
-    podman server exec -u gpadmin masterdb \
-        sh -c "ssh -o StrictHostKeyChecking=no ${i}"
+    ssh -o StrictHostKeyChecking=no ${i}"
 
 done
 ```
