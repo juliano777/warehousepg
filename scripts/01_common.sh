@@ -60,7 +60,9 @@ useradd \
     -r gpadmin
 
 # Generate SSH keys for gpadmin
-su - gpadmin -c "ssh-keygen -t rsa -b 4096 -P '' -f ~/.ssh/id_rsa"
+if [ ! -f ~gpadmin/.ssh/id_rsa2 ]; then
+    su - gpadmin -c "ssh-keygen -t rsa -b 4096 -P '' -f ~/.ssh/id_rsa";
+fi
 
 # WarehousePg variables
 cat << EOF > ~gpadmin/.whpg_vars
@@ -94,8 +96,13 @@ unset WHPG_HOME PGBIN
 EOF
 
 # New lines to profile script
-echo "source /usr/local/whpg/greenplum_path.sh" >> ~gpadmin/.bash_profile
-echo "source ~/.whpg_vars" >> ~gpadmin/.bash_profile
+CMD="grep -E '^source /usr/local/whpg/greenplum_path.sh' \
+    ~gpadmin/.bash_profile &> /dev/null"
+
+if ! (eval "${CMD}"); then
+    echo "source /usr/local/whpg/greenplum_path.sh" >> ~gpadmin/.bash_profile
+    echo "source ~/.whpg_vars" >> ~gpadmin/.bash_profile
+fi
 
 # Set ownership
 chown -R gpadmin: ~gpadmin
