@@ -86,14 +86,16 @@ SSH:
 ```bash
 for i in ${WHPGCLSTR}; do
     # Add Master SSH key (gpadmin user) to segment nodes
-    CMD="sudo bash -c \
-        'cat >> ~gpadmin/.ssh/authorized_keys && chown -R gpadmin: ~gpadmin/.ssh'" 
-    ssh tux@192.168.56.70 'sudo cat ~gpadmin/.ssh/id_rsa.pub' | \
-        ssh tux@192.168.56.71 "${CMD}"
+    CMD="cat >> ~gpadmin/.ssh/authorized_keys \
+        && chown -R gpadmin: ~gpadmin/.ssh"
+    CMD="sudo bash -c '${CMD}'" 
+
+    ssh tux@${MSTRDB} 'sudo cat ~gpadmin/.ssh/id_rsa.pub' | \
+        ssh tux@${i} "${CMD}"
 
     # Allow hosts automatically
-    ssh -o StrictHostKeyChecking=no ${i}"
-
+    CMD="sudo su - gpadmin -c 'ssh -o StrictHostKeyChecking=no gpadmin@${i}'"
+    ssh tux@${MSTRDB} "${CMD}"
 done
 ```
 
