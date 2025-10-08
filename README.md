@@ -94,7 +94,7 @@ WarehoousePG tarball installation on nodes:
     scp /tmp/whpg.tar.xz tux@${i}:/tmp/
 
     # Exectute script to install dependencies and install the tarball content
-    ssh -t tux@${i} 'sudo /tmp/scripts/02_nodes.sh'
+    ssh -t tux@${i} 'sudo /tmp/scripts/03_nodes.sh'
 done
 ```
 
