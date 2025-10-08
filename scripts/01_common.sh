@@ -60,7 +60,7 @@ useradd \
     -r gpadmin
 
 # Generate SSH keys for gpadmin
-if [ ! -f ~gpadmin/.ssh/id_rsa2 ]; then
+if [ ! -f ~gpadmin/.ssh/id_rsa ]; then
     su - gpadmin -c "ssh-keygen -t rsa -b 4096 -P '' -f ~/.ssh/id_rsa";
 fi
 

@@ -43,7 +43,7 @@ Environment variables regarding servers / servers:
 
 Copy local public SSH key to each server (user `tux`):
 ```bash
-for i in ${ALLSRV}; do
+ for i in ${ALLSRV}; do
     echo "===== [${i}] ==========================================="
     ssh-copy-id -o StrictHostKeyChecking=no tux@${i} 2> /dev/null
 done
@@ -51,7 +51,7 @@ done
 
 System configuration for all servers:
 ```bash
-for i in ${ALLSRV}; do
+ for i in ${ALLSRV}; do
     echo "===== [${i}] ==========================================="
     # Copy scripts directory into the server
     scp -r scripts tux@${i}:/tmp/
@@ -60,7 +60,7 @@ for i in ${ALLSRV}; do
     ssh tux@${i} 'chmod +x /tmp/scripts/*'
 
     # Perform all common tasks
-    ssh tux@${i} 'sudo /tmp/scripts/00_sys.sh'
+    ssh -t tux@${i} 'sudo /tmp/scripts/00_sys.sh'
 done
 ```
 
@@ -68,18 +68,18 @@ Wait for all server to restart...
 
 Initial tasks for all servers:
 ```bash
-for i in ${ALLSRV}; do
+ for i in ${ALLSRV}; do
     echo "===== [${i}] ==========================================="
 
     # Perform all common tasks
-    ssh tux@${i} 'sudo /tmp/scripts/01_common.sh'
+    ssh -t tux@${i} 'sudo /tmp/scripts/01_common.sh'
 done
 ```
 
 Conpilation:
 ```bash
 # Compilation script
-ssh tux@${CMPLR} 'sudo /tmp/scripts/02_compilation.sh'
+ssh -t tux@${CMPLR} 'sudo /tmp/scripts/02_compilation.sh'
 
 # 
 scp tux@${CMPLR}:/tmp/whpg.tar.xz /tmp/
@@ -87,20 +87,20 @@ scp tux@${CMPLR}:/tmp/whpg.tar.xz /tmp/
 
 WarehoousePG tarball installation on nodes:
 ```bash
-for i in ${WHPGCLSTR}; do
+ for i in ${WHPGCLSTR}; do
     echo "===== [${i}] ==========================================="
 
     # Copy compiled WarehousePg tarball
     scp /tmp/whpg.tar.xz tux@${i}:/tmp/
 
     # Exectute script to install dependencies and install the tarball content
-    ssh tux@${i} 'sudo /tmp/scripts/02_nodes.sh'
+    ssh -t tux@${i} 'sudo /tmp/scripts/02_nodes.sh'
 done
 ```
 
 SSH:
 ```bash
-for i in ${WHPGCLSTR}; do
+ for i in ${WHPGCLSTR}; do
     echo "===== [${i}] ==========================================="
 
     # Add Master SSH key (gpadmin user) to segment nodes
@@ -109,19 +109,19 @@ for i in ${WHPGCLSTR}; do
     CMD="sudo bash -c '${CMD}'" 
 
     ssh tux@${MSTRDB} 'sudo cat ~gpadmin/.ssh/id_rsa.pub' | \
-        ssh tux@${i} "${CMD}"
+        ssh -t tux@${i} "${CMD}"
 
     # Allow hosts automatically
     CMD="sudo su - gpadmin -c 'ssh -o StrictHostKeyChecking=no gpadmin@${i}'"
-    ssh tux@${MSTRDB} "${CMD}"
+    ssh -t tux@${MSTRDB} "${CMD}"
 done
 ```
 
 Cluster nodes:
 ```bash
-for i in ${WHPGCLSTR}; do
+ for i in ${WHPGCLSTR}; do
     echo "===== [${i}] ==========================================="
-    
+
     podman server exec -u gpadmin ${i} \
         sh -c 'source ~/.whpg_vars && mkdir -p ${DATA_DIRECTORY}'
 
