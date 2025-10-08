@@ -43,7 +43,8 @@ CXXFLAGS='-Wno-error'
 ./configure --prefix=/usr/local/whpg --with-python
 
 # Compilation
-make world
+#make world
+make
 
 # Install to configured directory
 make install

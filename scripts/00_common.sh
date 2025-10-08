@@ -173,7 +173,8 @@ ulimit -n 65536 65536
 # /etc/selinux/config file. As root, change the value of the SELINUX
 # parameter in the config file as follows:
 # SELINUX=disabled
-echo 'SELINUX=disabled' >> /etc/selinux/config
+sed 's/SELINUX=enforcing/SELINUX=disabled/g' -i /etc/selinux/config
+setenforce 0
 
 # As root, edit /etc/sssd/sssd.conf and add this parameter:
 # selinux_provider=none
