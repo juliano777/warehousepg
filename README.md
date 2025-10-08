@@ -44,13 +44,15 @@ Environment variables regarding servers / servers:
 Copy local public SSH key to each server (user `tux`):
 ```bash
 for i in ${ALLSRV}; do
-    ssh-copy-id -o StrictHostKeyChecking=no tux@${i}
+    echo "===== [${i}] ==========================================="
+    ssh-copy-id -o StrictHostKeyChecking=no tux@${i} 2> /dev/null
 done
 ```
 
 System configuration for all servers:
 ```bash
 for i in ${ALLSRV}; do
+    echo "===== [${i}] ==========================================="
     # Copy scripts directory into the server
     scp -r scripts tux@${i}:/tmp/
 
@@ -67,6 +69,7 @@ Wait for all server to restart...
 Initial tasks for all servers:
 ```bash
 for i in ${ALLSRV}; do
+    echo "===== [${i}] ==========================================="
 
     # Perform all common tasks
     ssh tux@${i} 'sudo /tmp/scripts/01_common.sh'
@@ -85,6 +88,8 @@ scp tux@${CMPLR}:/tmp/whpg.tar.xz /tmp/
 WarehoousePG tarball installation on nodes:
 ```bash
 for i in ${WHPGCLSTR}; do
+    echo "===== [${i}] ==========================================="
+
     # Copy compiled WarehousePg tarball
     scp /tmp/whpg.tar.xz tux@${i}:/tmp/
 
@@ -96,6 +101,8 @@ done
 SSH:
 ```bash
 for i in ${WHPGCLSTR}; do
+    echo "===== [${i}] ==========================================="
+
     # Add Master SSH key (gpadmin user) to segment nodes
     CMD="cat >> ~gpadmin/.ssh/authorized_keys \
         && chown -R gpadmin: ~gpadmin/.ssh"
@@ -113,6 +120,8 @@ done
 Cluster nodes:
 ```bash
 for i in ${WHPGCLSTR}; do
+    echo "===== [${i}] ==========================================="
+    
     podman server exec -u gpadmin ${i} \
         sh -c 'source ~/.whpg_vars && mkdir -p ${DATA_DIRECTORY}'
 
