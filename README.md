@@ -48,7 +48,7 @@ for i in ${ALLSRV}; do
 done
 ```
 
-Initial tasks for all servers:
+System configuration for all servers:
 ```bash
 for i in ${ALLSRV}; do
     # Copy scripts directory into the server
@@ -58,14 +58,25 @@ for i in ${ALLSRV}; do
     ssh tux@${i} 'chmod +x /tmp/scripts/*'
 
     # Perform all common tasks
-    ssh tux@${i} 'sudo /tmp/scripts/00_common.sh'
+    ssh tux@${i} 'sudo /tmp/scripts/00_sys.sh'
+done
+```
+
+Wait for all server to restart...
+
+Initial tasks for all servers:
+```bash
+for i in ${ALLSRV}; do
+
+    # Perform all common tasks
+    ssh tux@${i} 'sudo /tmp/scripts/01_common.sh'
 done
 ```
 
 Conpilation:
 ```bash
-# 
-ssh tux@${CMPLR} 'sudo /tmp/scripts/01_compilation.sh'
+# Compilation script
+ssh tux@${CMPLR} 'sudo /tmp/scripts/02_compilation.sh'
 
 # 
 scp tux@${CMPLR}:/tmp/whpg.tar.xz /tmp/
