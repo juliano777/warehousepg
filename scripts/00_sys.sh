@@ -84,6 +84,10 @@ echo 'selinux_provider=none' >> /etc/sssd/sssd.conf
 systemctl disable --now firewalld
 
 # Add new lines to /etc/hosts
+CMD="grep -E '^# WarehousePg cluster' /etc/hosts"
+
+if ! (eval "${CMD}"); then
+    
 cat << EOF >> /etc/hosts
 
 192.168.56.99   compiler.my.domain  compiler
@@ -95,6 +99,8 @@ cat << EOF >> /etc/hosts
 192.168.56.73   sdw3.my.domain  sdw3
 192.168.56.74   sdw4.my.domain  sdw4
 EOF
+
+fi
 
 # Reboot
 init 6
