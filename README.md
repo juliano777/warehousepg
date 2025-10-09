@@ -124,13 +124,17 @@ Cluster nodes:
  for i in ${WHPGCLSTR}; do
     echo "===== [${i}] ==========================================="
 
-    podman server exec -u gpadmin ${i} \
-        sh -c 'source ~/.whpg_vars && mkdir -p ${DATA_DIRECTORY}'
-
+    CMD='source ~/.whpg_vars && mkdir -p ${DATA_DIRECTORY}'
+    CMD_MSTR="${CMD} \${MASTER_DIRECTORY}"
+    
     if [ ${i} == ${MSTRDB} ]; then
-        podman server exec -u gpadmin ${i} sh -c "source ~/.whpg_vars && \
-            mkdir -p  \${MASTER_DIRECTORY}"
+        echo 'This is a coordinator node!'
+        CMD="${CMD_MSTR}"
     fi
+
+    echo $CMD
+    ssh -t tux@${i} "sudo su - gpadmin -c '${CMD}'"
+
 done
 ```
 
