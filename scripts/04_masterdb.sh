@@ -32,10 +32,8 @@ for i in ${DATA_DIRECTORY}; do
     echo "DATA_DIRECTORY='${i}'" >> ~gpadmin/gpinitsystem_config
 done
 
-# gpinitsystem -c gpinitsystem_config -h hostfile_gpinitsystem
-# export COORDINATOR_DATA_DIRECTORY=/var/local/whpg/data/master/gpseg-1
-# gpstate
-# Checar /etc/hosts
 
+export COORDINATOR_DATA_DIRECTORY="${MASTER_DIRECTORY}/gpseg-1"
 
+gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem -a
 

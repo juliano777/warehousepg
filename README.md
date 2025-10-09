@@ -136,7 +136,7 @@ Cluster nodes:
 done
 ```
 
-Master:
+Building the cluster:
 ```bash
 CMD="sudo su - gpadmin -c \
     'source ~/.whpg_vars && /tmp/scripts/04_masterdb.sh'"
@@ -145,8 +145,8 @@ ssh -t tux@${MSTRDB} "${CMD}"
 ```
 
 
-
-MasterDB node; a script reset:
+In case of error it's possible to use reset script and start over.  
+On coordinator node, user `gpadmin`:
 ```bash
 cat << EOF > reset.sh && chmod +x reset.sh
 #!/bin/bash
@@ -160,17 +160,3 @@ gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem -a
 
 EOF
 ```
-
-
-        
-
-gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem -a
-
-
-rm -fr /var/local/whpg/data && \
-ssh sdw1 'rm -fr /var/local/whpg/data' && \
-ssh sdw3 'rm -fr /var/local/whpg/data' && \
-ssh sdw2 'rm -fr /var/local/whpg/data' && \
-ssh sdw4 'rm -fr /var/local/whpg/data' && \
-rm -fr gpA*
-
