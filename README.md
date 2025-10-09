@@ -181,12 +181,30 @@ On coordinator node, user `gpadmin`:
 cat << EOF > reset.sh && chmod +x reset.sh
 #!/bin/bash
 
-rm -fr /var/local/whpg/{data,gpAdminLogs} && mkdir -p /var/local/whpg/data/sdw{1,2,3}
-mkdir /var/local/whpg/data/master
-ssh sdw1 'rm -fr /var/local/whpg/data && mkdir -p /var/local/whpg/data/sdw{1,2,3}'
-ssh sdw2 'rm -fr /var/local/whpg/data && mkdir -p /var/local/whpg/data/sdw{1,2,3}'
-ssh sdw3 'rm -fr /var/local/whpg/data && mkdir -p /var/local/whpg/data/sdw{1,2,3}'
-gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem -a
+# Coordinator node -----------------------------------------------------------
 
+# Remove directories
+rm -fr /var/local/whpg/{data,gpAdminLogs}
+
+# Recreating the directories
+mkdir -p /var/local/whpg/data/sdw{1,2,3} /var/local/whpg/data/master
+
+# Segment nodes --------------------------------------------------------------
+for i in 'sdw1 sdw2 sdw3'; do
+    # Command to remove the directories
+    DIRRM='rm -fr /var/local/whpg/data'
+
+    # Command to recreate the directories
+    DIRMK='mkdir -p /var/local/whpg/data/sdw{1,2,3}'
+
+    # Command to be executed merging both
+    CMD="\${DIRRM} && \${DIRMK}"
+
+    # Command execution
+    ssh \${i} "\${CMD}"
+done
+
+# Cluster creation
+gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem -a
 EOF
 ```
