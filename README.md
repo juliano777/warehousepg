@@ -1,4 +1,4 @@
-# WarehousePg tutorial (Podman)
+# WarehousePg tutorial
 
 ## About the lab environment
 
@@ -10,8 +10,6 @@
 | Segment host 2                                | sdw2         | 192.168.56.72  |
 | Segment host 3                                | sdw3         | 192.168.56.73  |
 | Segment host 4 (initially out of the cluster) | sdw4         | 192.168.56.74  |
-
-
 
 
 ## Clone this repository
@@ -165,20 +163,6 @@ EOF
 
 
         
-<!--
-
-```bash
-# /etc/hosts
-cat << EOF >> /etc/hosts
-
-#
-master
-sdw1
-sdw2
-sdw3
-
-EOF
-```
 
 gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem -a
 
@@ -189,9 +173,4 @@ ssh sdw3 'rm -fr /var/local/whpg/data' && \
 ssh sdw2 'rm -fr /var/local/whpg/data' && \
 ssh sdw4 'rm -fr /var/local/whpg/data' && \
 rm -fr gpA*
-
-
--->
-
-
 

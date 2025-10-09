@@ -90,6 +90,8 @@ if ! (eval "${CMD}"); then
     
 cat << EOF >> /etc/hosts
 
+127.0.0.1	    localhost.localdomain   localhost
+
 192.168.56.99   compiler.my.domain  compiler
 
 # WarehousePg cluster --------------------------------------------------------
