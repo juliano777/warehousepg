@@ -30,6 +30,8 @@ for i in ${DATA_DIRECTORY}; do
 done
 
 # gpinitsystem -c gpinitsystem_config -h hostfile_gpinitsystem
+# export COORDINATOR_DATA_DIRECTORY=/var/local/whpg/data/master/gpseg-1
+# gpstate
 
 
 
