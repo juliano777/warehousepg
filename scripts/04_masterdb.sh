@@ -5,12 +5,15 @@ source ~/.whpg_vars
 
 # Cluster initial configuration ----------------------------------------------
 
-# Segment hosts file
-cat << EOF > ~gpadmin/hostfile_gpinitsystem
-sdw1
-sdw2
-sdw3
-EOF
+SEG='sdw1 sdw2 sdw3'
+
+# Segment hosts file and host add key
+for i in ${SEG}; do
+    echo "${i}" >> ~gpadmin/hostfile_gpinitsystem
+    ssh-copy-id -o StrictHostKeyChecking=no ${i} 2> /dev/null
+done
+
+
 
 # Initialization configuration file for WarehousePG
 cat << EOF > ~gpadmin/gpinitsystem_config
@@ -32,6 +35,7 @@ done
 # gpinitsystem -c gpinitsystem_config -h hostfile_gpinitsystem
 # export COORDINATOR_DATA_DIRECTORY=/var/local/whpg/data/master/gpseg-1
 # gpstate
+# Checar /etc/hosts
 
 
 
