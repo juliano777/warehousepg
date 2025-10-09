@@ -41,9 +41,13 @@ vm.dirty_writeback_centisecs = 100
 vm.zone_reclaim_mode = 0
 EOF
 
+# Get RAM in kb
 RAM_IN_KB=`cat /proc/meminfo | grep MemTotal | awk '{print $2}'`
+
+# Get RAM in bytes
 RAM_IN_BYTES=$(($RAM_IN_KB*1024))
 
+# Setting kernel parameters based on RAM values
 echo "vm.min_free_kbytes = $(($RAM_IN_BYTES*3/100/1024))" | tee -a /etc/sysctl.d/10-whpg.conf > /dev/null
 echo "kernel.shmall = $(($RAM_IN_BYTES/2/4096))" | tee -a /etc/sysctl.d/10-whpg.conf > /dev/null
 echo "kernel.shmmax = $(($RAM_IN_BYTES/2))" | tee -a /etc/sysctl.d/10-whpg.conf > /dev/null
@@ -58,8 +62,10 @@ else
     echo "vm.dirty_bytes = 4294967296 # 4GB" | tee -a /etc/sysctl.d/10-whpg.conf > /dev/null
 fi
 
+# Apply the kernel parameters
 sysctl -p /etc/sysctl.d/10-whpg.conf
 
+# Security limits
 tee -a /etc/security/limits.d/10-nproc.conf << EOF
 * soft nofile 524288
 * hard nofile 524288
@@ -83,11 +89,7 @@ echo 'selinux_provider=none' >> /etc/sssd/sssd.conf
 # Deactivate or Configure Firewall Software
 systemctl disable --now firewalld
 
-# Add new lines to /etc/hosts
-CMD="grep -E '^# WarehousePg cluster' /etc/hosts"
-
-if ! (eval "${CMD}"); then
-    
+# /etc/hosts    
 cat << EOF >> /etc/hosts
 
 127.0.0.1	    localhost.localdomain   localhost

@@ -28,7 +28,7 @@ export PYTHON='/usr/bin/python${PYTHON_VERSON}'
 
 EOF
 
-# Update alternatives
+# Update alternatives regarding Python
 update-alternatives --install /usr/bin/python3 python3 ${PYTHON} 1
 update-alternatives --install /usr/bin/python3 python ${PYTHON} 1
 update-alternatives --set python3 ${PYTHON}
@@ -36,7 +36,7 @@ update-alternatives --set python ${PYTHON}
 
 # Packages -------------------------------------------------------------------
 
-# 
+# Package list to be installed
 PKG="xerces-c neovim bash-completion procps-ng util-linux sudo \
 openssh-clients openssh-server iproute rsync python3-psycopg2 \
 python3-pyyaml python3-psutil python3-setuptools tree"

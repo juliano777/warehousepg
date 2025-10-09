@@ -13,8 +13,6 @@ for i in ${SEG}; do
     ssh-copy-id -o StrictHostKeyChecking=no ${i} 2> /dev/null
 done
 
-
-
 # Initialization configuration file for WarehousePG
 cat << EOF > ~gpadmin/gpinitsystem_config
 ARRAY_NAME='whcluster_acme'
@@ -28,11 +26,12 @@ MASTER_DIRECTORY='${MASTER_DIRECTORY}'
 MACHINE_SEGMENTS='3'
 EOF
 
+# Add each element of DATA_DIRECTORY variable
 for i in ${DATA_DIRECTORY}; do
     echo "DATA_DIRECTORY='${i}'" >> ~gpadmin/gpinitsystem_config
 done
 
-
+# 
 export COORDINATOR_DATA_DIRECTORY="${MASTER_DIRECTORY}/gpseg-1"
 
 gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem -a

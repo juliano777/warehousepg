@@ -165,6 +165,19 @@ done
 
 Building the cluster on coordinator node:
 ```bash
+# New lines to be add to profile script of gpadmin user
+read -r -d '' S << EOF
+
+# Coordinator data directory environment variable
+export COORDINATOR_DATA_DIRECTORY="\${MASTER_DIRECTORY}/gpseg-1"
+EOF
+
+# Command to add new lines to profile script
+CMD="sudo su - gpadmin -c 'printf \"%s\n\" \"${S}\" >> ~/.whpg_vars'"
+
+# Command execution
+ssh -t tux@${MSTRDB} "${CMD}"
+
 # Command to run as gpadmin user on the coordinator node
 CMD="sudo su - gpadmin -c \
     'source ~/.whpg_vars && /tmp/scripts/04_masterdb.sh'"
