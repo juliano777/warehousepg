@@ -29,7 +29,7 @@ for i in ${DATA_DIRECTORY}; do
     echo "DATA_DIRECTORY='${i}'" >> ~gpadmin/gpinitsystem_config
 done
 
-# libxerces-c-3.2.so
+# gpinitsystem -c gpinitsystem_config -h hostfile_gpinitsystem
 
 
 
