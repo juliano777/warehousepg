@@ -108,7 +108,7 @@ SSH:
         && chown -R gpadmin: ~gpadmin/.ssh"
     CMD="sudo bash -c '${CMD}'" 
 
-    ssh tux@${MSTRDB} 'sudo cat ~gpadmin/.ssh/id_rsa.pub' | \
+    ssh -t tux@${MSTRDB} 'sudo cat ~gpadmin/.ssh/id_rsa.pub' | \
         ssh -t tux@${i} "${CMD}"
 
     # Allow hosts automatically
