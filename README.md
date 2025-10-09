@@ -140,8 +140,10 @@ done
 
 Master:
 ```bash
-podman server exec -itu gpadmin masterdb \
-    sh -c 'source ~/.whpg_vars && /tmp/scripts/03_masterdb.sh'
+CMD="sudo su - gpadmin -c \
+    'source ~/.whpg_vars && /tmp/scripts/04_masterdb.sh'"
+
+ssh -t tux@${MSTRDB} "${CMD}"
 ```
 
 
