@@ -31,8 +31,5 @@ for i in ${DATA_DIRECTORY}; do
     echo "DATA_DIRECTORY='${i}'" >> ~gpadmin/gpinitsystem_config
 done
 
-# 
-export COORDINATOR_DATA_DIRECTORY="${MASTER_DIRECTORY}/gpseg-1"
-
+# Cluster creation
 gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem -a
-
