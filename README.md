@@ -30,6 +30,8 @@ HTTPS
 git clone https://github.com/juliano777/warehousepg.git && cd warehousepg/
 ```
 
+## General procedures for all machines
+
 Environment variables regarding servers / servers:
 ```bash
  CMPLR='192.168.56.99'  # Compiler machine
@@ -74,14 +76,18 @@ Initial tasks for all servers:
 done
 ```
 
+## Source code compilation
+
 Conpilation:
 ```bash
 # Compilation script
 ssh -t tux@${CMPLR} 'sudo /tmp/scripts/02_compilation.sh'
 
-# 
+# Copy the generated tarball to local /tmp
 scp tux@${CMPLR}:/tmp/whpg.tar.xz /tmp/
 ```
+
+## WarehousePg "installation"
 
 WarehoousePG tarball installation on nodes:
 ```bash
@@ -136,7 +142,9 @@ Cluster nodes:
 done
 ```
 
-Building the cluster:
+## Building the cluster
+
+Building the cluster on coordinator node:
 ```bash
 CMD="sudo su - gpadmin -c \
     'source ~/.whpg_vars && /tmp/scripts/04_masterdb.sh'"
@@ -144,6 +152,7 @@ CMD="sudo su - gpadmin -c \
 ssh -t tux@${MSTRDB} "${CMD}"
 ```
 
+## Extra
 
 In case of error it's possible to use reset script and start over.  
 On coordinator node, user `gpadmin`:
