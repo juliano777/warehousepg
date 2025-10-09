@@ -106,6 +106,7 @@ SSH:
     # Add Master SSH key (gpadmin user) to segment nodes
     CMD="cat >> ~gpadmin/.ssh/authorized_keys \
         && chown -R gpadmin: ~gpadmin/.ssh"
+        
     CMD="sudo bash -c '${CMD}'" 
 
     ssh -t tux@${MSTRDB} 'sudo cat ~gpadmin/.ssh/id_rsa.pub' | \
