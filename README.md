@@ -38,12 +38,21 @@ git clone https://github.com/juliano777/warehousepg.git && cd warehousepg/
 
 ## General procedures for all machines
 
-Environment variables regarding servers / servers:
+Environment variables regarding servers:
 ```bash
- CMPLR='192.168.56.99'  # Compiler machine
- MSTRDB='192.168.56.70'  # Master (coordinator)
+ # Compiler machine
+ CMPLR='192.168.56.99'
+
+ # Master (coordinator)
+ MSTRDB='192.168.56.70'
+
+ # Segment Node IPs
  SEGNODES='192.168.56.71 192.168.56.72 192.168.56.73 192.168.56.74'
+
+ # Cluster members
  WHPGCLSTR="${MSTRDB} ${SEGNODES}"
+
+ # All servers
  ALLSRV="${CMPLR} ${WHPGCLSTR}"
 ```
 
@@ -51,6 +60,8 @@ Copy local public SSH key to each server (user `tux`):
 ```bash
  for i in ${ALLSRV}; do
     echo "===== [${i}] ==========================================="
+
+    # Copy public SSH key automatically accepting the host key
     ssh-copy-id -o StrictHostKeyChecking=no tux@${i} 2> /dev/null
 done
 ```
@@ -108,12 +119,13 @@ WarehoousePG tarball installation on nodes:
 done
 ```
 
-SSH:
+Authorize the public key of the coordinator's `gpadmin`user on each node in
+the cluster:
 ```bash
  for i in ${WHPGCLSTR}; do
     echo "===== [${i}] ==========================================="
 
-    # Add Master SSH key (gpadmin user) to segment nodes
+    # Add Master SSH key (gpadmin user) to each cluster node
     CMD="cat >> ~gpadmin/.ssh/authorized_keys \
         && chown -R gpadmin: ~gpadmin/.ssh"
 
@@ -129,20 +141,21 @@ SSH:
 done
 ```
 
-Cluster nodes:
+Creating directories for the coordinator and segments:
 ```bash
  for i in ${WHPGCLSTR}; do
     echo "===== [${i}] ==========================================="
 
+    # Coomand to create the directories
     CMD='source ~/.whpg_vars && mkdir -p ${DATA_DIRECTORY}'
     CMD_MSTR="${CMD} \${MASTER_DIRECTORY}"
     
     if [ ${i} == ${MSTRDB} ]; then
-        echo 'This is a coordinator node!'
+        # Command to create directories in the coordinator
         CMD="${CMD_MSTR}"
     fi
 
-    echo $CMD
+    # Command execution via SSH
     ssh -t tux@${i} "sudo su - gpadmin -c '${CMD}'"
 
 done
@@ -152,9 +165,11 @@ done
 
 Building the cluster on coordinator node:
 ```bash
+# Command to run as gpadmin user on the coordinator node
 CMD="sudo su - gpadmin -c \
     'source ~/.whpg_vars && /tmp/scripts/04_masterdb.sh'"
 
+# Command execution
 ssh -t tux@${MSTRDB} "${CMD}"
 ```
 
