@@ -25,7 +25,7 @@ git clone git@github.com:juliano777/warehousepg.git && cd warehousepg/
 
 or 
 
-HHTPS
+HTTPS
 ```bash
 git clone https://github.com/juliano777/warehousepg.git && cd warehousepg/
 ```
