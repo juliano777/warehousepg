@@ -106,14 +106,15 @@ SSH:
     # Add Master SSH key (gpadmin user) to segment nodes
     CMD="cat >> ~gpadmin/.ssh/authorized_keys \
         && chown -R gpadmin: ~gpadmin/.ssh"
-        
+
     CMD="sudo bash -c '${CMD}'" 
 
     ssh -t tux@${MSTRDB} 'sudo cat ~gpadmin/.ssh/id_rsa.pub' | \
         ssh -t tux@${i} "${CMD}"
 
     # Allow hosts automatically
-    CMD="sudo su - gpadmin -c 'ssh -o StrictHostKeyChecking=no gpadmin@${i}'"
+    CMD="sudo su - gpadmin -c \
+        'ssh -o StrictHostKeyChecking=no gpadmin@${i} \"true\"'"
     ssh -t tux@${MSTRDB} "${CMD}"
 done
 ```
