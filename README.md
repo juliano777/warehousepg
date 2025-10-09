@@ -1,6 +1,11 @@
 # WarehousePg tutorial
 
+This tutoriam amis to explain in a practical way how to build a WarehousePg
+clluster.
+
 ## About the lab environment
+
+This tutorial is based on [Rocky Linux](https://rockylinux.org) 10.
 
 | **Role**                                      | **hostname** | **IP address** |
 |-----------------------------------------------|--------------|----------------|
