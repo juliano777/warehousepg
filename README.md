@@ -105,7 +105,7 @@ scp tux@${CMPLR}:/tmp/whpg.tar.xz /tmp/
 ```
 
 > **Important!!!**: Here it is quite possible that manual interventions will be 
-> necessary for now.
+> necessary for now.  
 > Variable settings for compilation.
 
 ## WarehousePg "installation"
