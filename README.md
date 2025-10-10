@@ -104,8 +104,9 @@ ssh -t tux@${CMPLR} 'sudo /tmp/scripts/02_compilation.sh'
 scp tux@${CMPLR}:/tmp/whpg.tar.xz /tmp/
 ```
 
-> **Important!!!**: Here it is quite possible that manual interventions will be 
-> necessary for now.  
+> **Important!!!**. 
+> Here it is quite possible that manual interventions will be necessary for
+> now.  
 > Variable settings for compilation.
 
 ## WarehousePg "installation"
