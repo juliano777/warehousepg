@@ -1,0 +1,49 @@
+#!/bin/bash
+# Use: host-ip <hostname> <ip> <interface>
+
+set -e
+
+if [ $# -ne 3 ]; then
+    echo "Use: ${0} <hostname> <ip> <interface>"
+    exit 1
+fi
+
+HOSTNAME="${1}"
+IP="${2}"
+IFACE="${3}"
+
+echo "[INFO] New hostname: ${HOSTNAME}..."
+hostnamectl set-hostname "${HOSTNAME}"
+
+CONFILE="/etc/NetworkManager/system-connections/${IFACE}.nmconnection"
+
+echo "[INFO] Persistent configuration for ${IFACE}..."
+
+cat > "${CONFILE}" <<EOF
+[connection]
+id=${IFACE}
+uuid=`uuidgen`
+type=ethernet
+interface-name=${IFACE}
+autoconnect=true
+
+[ipv4]
+address1=${IP}
+method=manual
+
+[ipv6]
+method=ignore
+EOF
+
+chmod 600 "${CONFILE}"
+
+echo "[INFO] Restarting NetworkManager..."
+systemctl restart NetworkManager
+
+echo "[INFO] Applying configuration..."
+nmcli dev reapply "${IFACE}" || nmcli con up "${IFACE}"
+
+echo "[OK] Setup complete."
+echo
+hostnamectl status | grep "Static hostname"
+ip -4 addr show dev "${IFACE}" | grep "inet "
