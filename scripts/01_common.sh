@@ -69,6 +69,9 @@ cat << EOF > ~gpadmin/.whpg_vars
 # WarehousePg Home (installation directory)
 export WHPG_HOME='/usr/local/whpg'
 
+# WarehousePg bin directory
+export WHPGBIN="\${WHPG_HOME}/bin"
+
 # Library directories
 #export LD_LIBRARY_PATH="\${WHPG_HOME}/lib:\${LD_LIBRARY_PATH}"
 
@@ -91,8 +94,11 @@ export PGUSER=gpadmin
 # Database
 export PGDATABASE=gpadmin
 
+# PATH
+export PATH="\${PATH}:\${WHPGBIN}"
+
 # Unset variables
-unset WHPG_HOME PGBIN
+unset WHPG_HOME WHPGBIN
 EOF
 
 # New lines to profile script
