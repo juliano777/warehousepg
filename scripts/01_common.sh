@@ -67,16 +67,16 @@ fi
 # WarehousePg variables
 cat << EOF > ~gpadmin/.whpg_vars
 # WarehousePg Home (installation directory)
-export WHPG_HOME='/usr/local/whpg'
+export GPHOME='/usr/local/whpg'
 
 # WarehousePg bin directory
-export WHPGBIN="\${WHPG_HOME}/bin"
+export WHPGBIN="\${GPHOME}/bin"
 
 # Library directories
-#export LD_LIBRARY_PATH="\${WHPG_HOME}/lib:\${LD_LIBRARY_PATH}"
+#export LD_LIBRARY_PATH="\${GPHOME}/lib:\${LD_LIBRARY_PATH}"
 
 # Manuals directories
-export MANPATH="\${WHPG_HOME}/man:\${MANPATH}"
+export MANPATH="\${GPHOME}/man:\${MANPATH}"
 
 # Master directory
 export MASTER_DIRECTORY='/var/local/whpg/data/master'
@@ -97,8 +97,8 @@ export PGDATABASE=gpadmin
 # PATH
 export PATH="\${PATH}:\${WHPGBIN}"
 
-# Unset variables
-unset WHPG_HOME WHPGBIN
+# Unset variable
+unset WHPGBIN
 EOF
 
 # New lines to profile script
