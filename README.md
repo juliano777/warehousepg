@@ -141,11 +141,28 @@ the cluster:
 
     # Ensure the ownership for gpadmin user
     CMD="${CMD} && chown -R gpadmin: ~gpadmin"
-    
+
     # Execute the commands
     ssh -t tux@${i} "${CMD}"
 done
 ```
+
+From the coordinator node, gpadmin user, add each host member as a known host:
+```bash
+ MEMBERS='masterdb sdw1 sdw2 sdw3'
+ DOMAIN='my.domain'
+
+  for i in ${WHPGCLSTR}; do
+    CMD="ssh-copy-id -o StrictHostKeyChecking=no ${i} 2> /dev/null"
+    ssh gpadmin@${i} "${CMD}"
+done
+
+  for i in ${MEMBERS}; do
+    CMD="ssh-copy-id -o StrictHostKeyChecking=no ${i} 2> /dev/null"
+    ssh gpadmin@${i} "${CMD}"
+    ssh gpadmin@${i}.${DOMAIN} "${CMD}"
+done 
+
 
 Creating directories for the coordinator and segments:
 ```bash
