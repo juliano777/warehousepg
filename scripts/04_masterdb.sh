@@ -8,6 +8,9 @@ source ~/.whpg_vars
 SEG='sdw1 sdw2 sdw3'
 DOMAIN='my.domain'
 
+# Erase the hosts file
+> ~gpadmin/hostfile_gpinitsystem
+
 # Segment hosts file and host add key
 for i in ${SEG}; do
     echo "${i}" >> ~gpadmin/hostfile_gpinitsystem
