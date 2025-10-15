@@ -199,7 +199,7 @@ done
 Building the cluster on coordinator node:
 ```bash
 # Execute the script that will build the cluster
-ssh gpadmin@${MSTRDB} '/tmp/scripts/04_masterdb.sh'
+ssh gpadmin@${MSTRDB} 'bash -l -c "/tmp/scripts/04_masterdb.sh"'
 ```
 
 ## Extra
