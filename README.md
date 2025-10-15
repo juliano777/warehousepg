@@ -147,6 +147,8 @@ the cluster:
 done
 ```
 
+## Building the cluster
+
 From the coordinator node, gpadmin user, add each host member as a known host:
 ```bash
  MEMBERS='masterdb sdw1 sdw2 sdw3 sdw4'
@@ -194,26 +196,8 @@ Creating directories for the coordinator and segments:
 done
 ```
 
-## Building the cluster
-
 Building the cluster on coordinator node:
 ```bash
- # Loop to add the local pub SSH key to each node of the cluster
- for i in ${WHPGCLSTR}; do
-    # Copy local public SSH key to node
-    scp ~/.ssh/id_rsa.pub tux@${i}:/tmp/
-
-    # Add the local pub key as an authorized key for gpadmin user
-    CMD='cat /tmp/id_rsa.pub | sudo tee -a ~gpadmin/.ssh/authorized_keys'
-    ssh -t tux@${i} "${CMD}"
-
-    # Ensure the ownership for gpadmin user
-    ssh -t tux@${i} 'sudo chown -R gpadmin: ~gpadmin'
-
-    # Remove the copied file
-    ssh tux@${i} 'rm -f /tmp/id_rsa.pub'
-done
-
 # Execute the script that will build the cluster
 ssh gpadmin@${MSTRDB} '/tmp/scripts/04_masterdb.sh'
 ```
