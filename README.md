@@ -172,7 +172,7 @@ done
     # Execute the command
     ssh gpadmin@${MSTRDB} "${CMD}"
 done 
-
+```
 
 Creating directories for the coordinator and segments:
 ```bash
