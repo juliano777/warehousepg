@@ -176,7 +176,7 @@ Building the cluster on coordinator node:
     scp ~/.ssh/id_rsa.pub tux@${i}:/tmp/
 
     # Add the local pub key as an authorized key for gpadmin user
-    CMD='sudo cat /tmp/id_rsa.pub >> ~gpadmin/.ssh/authorized_keys'
+    CMD='cat /tmp/id_rsa.pub | sudo tee -a ~gpadmin/.ssh/authorized_keys'
     ssh -t tux@${i} "${CMD}"
 
     # Ensure the ownership for gpadmin user
