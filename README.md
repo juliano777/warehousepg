@@ -170,7 +170,7 @@ done
 
 Building the cluster on coordinator node:
 ```bash
- # 
+ # Loop to add the local pub SSH key to each node of the cluster
  for i in ${WHPGCLSTR}; do
     # Copy local public SSH key to node
     scp ~/.ssh/id_rsa.pub ${i}:/tmp/
