@@ -130,19 +130,20 @@ the cluster:
  for i in ${WHPGCLSTR}; do
     echo "===== [${i}] ==========================================="
 
-    # Add Master SSH key (gpadmin user) to each cluster node
-    CMD="cat >> ~gpadmin/.ssh/authorized_keys \
-        && chown -R gpadmin: ~gpadmin/.ssh"
+    # Copy local SSH pub key to node
+    scp ~/.ssh/id_rsa.pub tux@${i}:/tmp/
 
-    CMD="sudo bash -c '${CMD}'" 
+    # Add the copied key as an authorized key for gpadmin user
+    CMD='cat /tmp/id_rsa.pub | sudo tee -a ~gpadmin/.ssh/authorized_keys'
 
-    ssh -t tux@${MSTRDB} 'sudo cat ~gpadmin/.ssh/id_rsa.pub' | \
-        ssh -t tux@${i} "${CMD}"
+    #  and remove the file
+    CMD="${CMD} && rm -f /tmp/id_rsa.pub"
 
-    # Allow hosts automatically
-    CMD="sudo su - gpadmin -c \
-        'ssh -o StrictHostKeyChecking=no gpadmin@${i} \"true\"'"
-    ssh -t tux@${MSTRDB} "${CMD}"
+    # Ensure the ownership for gpadmin user
+    CMD="${CMD} && chown -R gpadmin: ~gpadmin"
+    
+    # Execute the commands
+    ssh -t tux@${i} "${CMD}"
 done
 ```
 

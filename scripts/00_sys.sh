@@ -90,7 +90,7 @@ echo 'selinux_provider=none' >> /etc/sssd/sssd.conf
 systemctl disable --now firewalld
 
 # /etc/hosts    
-cat << EOF >> /etc/hosts
+cat << EOF > /etc/hosts
 
 127.0.0.1	    localhost.localdomain   localhost
 
