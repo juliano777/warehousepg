@@ -10,7 +10,7 @@ dnf update -y
 
 # Python ---------------------------------------------------------------------
 # Set Python version
-export PYTHON_VERSON='3.12'
+export PYTHON_VERSON='3.11'
 
 # Install Python
 dnf install -y python${PYTHON_VERSON}
@@ -84,6 +84,9 @@ export MASTER_DIRECTORY='/var/local/whpg/data/master'
 # Data directory
 export DATA_DIRECTORY="/var/local/whpg/data/sdw1 /var/local/whpg/data/sdw2 \
 /var/local/whpg/data/sdw3"
+
+# Coordinator data directory
+export COORDINATOR_DATA_DIRECTORY="\${MASTER_DIRECTORY}/gpseg-1"
 
 # DB port
 export PGPORT=5432
