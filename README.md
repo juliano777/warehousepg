@@ -173,7 +173,7 @@ Building the cluster on coordinator node:
  # Loop to add the local pub SSH key to each node of the cluster
  for i in ${WHPGCLSTR}; do
     # Copy local public SSH key to node
-    scp ~/.ssh/id_rsa.pub ${i}:/tmp/
+    scp ~/.ssh/id_rsa.pub tux@${i}:/tmp/
 
     # Add the local pub key as an authorized key for gpadmin user
     CMD='sudo cat /tmp/id_rsa.pub >> ~gpadmin/.ssh/authorized_keys'
