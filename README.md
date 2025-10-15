@@ -149,7 +149,7 @@ done
 
 From the coordinator node, gpadmin user, add each host member as a known host:
 ```bash
- MEMBERS='masterdb sdw1 sdw2 sdw3'
+ MEMBERS='masterdb sdw1 sdw2 sdw3 sdw4'
  DOMAIN='my.domain'
 
  # BY IP address
