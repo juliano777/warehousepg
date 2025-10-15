@@ -170,25 +170,24 @@ done
 
 Building the cluster on coordinator node:
 ```bash
-# New lines to be add to profile script of gpadmin user
-read -r -d '' S << EOF
+ # 
+ for i in ${WHPGCLSTR}; do
+    # Copy local public SSH key to node
+    scp ~/.ssh/id_rsa.pub ${i}:/tmp/
 
-# Coordinator data directory environment variable
-export COORDINATOR_DATA_DIRECTORY="\${MASTER_DIRECTORY}/gpseg-1"
-EOF
+    # Add the local pub key as an authorized key for gpadmin user
+    CMD='sudo cat /tmp/id_rsa.pub >> ~gpadmin/.ssh/authorized_keys'
+    ssh -t tux@${i} "${CMD}"
 
-# Command to add new lines to profile script
-CMD="sudo su - gpadmin -c 'printf \"%s\n\" \"${S}\" >> ~/.whpg_vars'"
+    # Ensure the ownership for gpadmin user
+    ssh -t tux@${i} 'sudo chown -R gpadmin: ~gpadmin'
 
-# Command execution
-ssh -t tux@${MSTRDB} "${CMD}"
+    # Remove the copied file
+    ssh tux@${i} 'rm -f /tmp/id_rsa.pub'
+done
 
-# Command to run as gpadmin user on the coordinator node
-CMD="sudo su - gpadmin -c \
-    'source ~/.whpg_vars && /tmp/scripts/04_masterdb.sh'"
-
-# Command execution
-ssh -t tux@${MSTRDB} "${CMD}"
+# Execute the script that will build the cluster
+ssh gpadmin@${MSTRDB} '/tmp/scripts/04_masterdb.sh'
 ```
 
 ## Extra

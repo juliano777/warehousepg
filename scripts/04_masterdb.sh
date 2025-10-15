@@ -6,11 +6,13 @@ source ~/.whpg_vars
 # Cluster initial configuration ----------------------------------------------
 
 SEG='sdw1 sdw2 sdw3'
+DOMAIN='my.domain'
 
 # Segment hosts file and host add key
 for i in ${SEG}; do
     echo "${i}" >> ~gpadmin/hostfile_gpinitsystem
     ssh-copy-id -o StrictHostKeyChecking=no ${i} 2> /dev/null
+    ssh-copy-id -o StrictHostKeyChecking=no ${i}.${DOMAIN} 2> /dev/null
 done
 
 # Initialization configuration file for WarehousePG
@@ -23,6 +25,9 @@ MASTER_ARRAY_HOST='0'
 COORDINATOR_PORT=${PGPORT}
 SEG_PREFIX='gpseg'
 MASTER_DIRECTORY='${MASTER_DIRECTORY}'
+
+# Coordinator data directory environment variable
+export COORDINATOR_DATA_DIRECTORY="\${MASTER_DIRECTORY}/gpseg-1"
 MACHINE_SEGMENTS='3'
 EOF
 
