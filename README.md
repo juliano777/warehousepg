@@ -152,15 +152,25 @@ From the coordinator node, gpadmin user, add each host member as a known host:
  MEMBERS='masterdb sdw1 sdw2 sdw3'
  DOMAIN='my.domain'
 
-  for i in ${WHPGCLSTR}; do
+ # BY IP address
+ for i in ${WHPGCLSTR}; do
     CMD="ssh-copy-id -o StrictHostKeyChecking=no ${i} 2> /dev/null"
     ssh gpadmin@${i} "${CMD}"
 done
 
-  for i in ${MEMBERS}; do
-    CMD="ssh-copy-id -o StrictHostKeyChecking=no ${i} 2> /dev/null"
-    ssh gpadmin@${i} "${CMD}"
-    ssh gpadmin@${i}.${DOMAIN} "${CMD}"
+ # By hostname and hostname with domain
+ for i in ${MEMBERS}; do
+    # Short hostname
+    SHORT="ssh-copy-id -o StrictHostKeyChecking=no ${i} 2> /dev/null"
+    
+    # Long hostname (with domain)
+    LONG="ssh-copy-id -o StrictHostKeyChecking=no ${i}.${DOMAIN} 2> /dev/null"
+
+    # Concatenate the both commands into a unique variable
+    CMD="${SHORT} && ${LONG}"
+
+    # Execute the command
+    ssh gpadmin@${MSTRDB} "${CMD}"
 done 
 
 
