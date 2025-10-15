@@ -232,8 +232,5 @@ for i in 'sdw1 sdw2 sdw3'; do
     # Command execution
     ssh \${i} "\${CMD}"
 done
-
-# Cluster creation
-gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem -a
 EOF
 ```
