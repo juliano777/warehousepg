@@ -220,7 +220,7 @@ mkdir -p /var/local/whpg/data/sdw{1,2,3} /var/local/whpg/data/master
 
 # Segment nodes --------------------------------------------------------------
 NODES='sdw1 sdw2 sdw3'
-for i in "\${NODES}"; do
+for i in \${NODES}; do
     # Command to remove the directories
     DIRRM='rm -fr /var/local/whpg/data'
 
