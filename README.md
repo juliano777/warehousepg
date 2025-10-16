@@ -140,7 +140,7 @@ the cluster:
     CMD="${CMD} && rm -f /tmp/id_rsa.pub"
 
     # Ensure the ownership for gpadmin user
-    CMD="${CMD} && chown -R gpadmin: ~gpadmin"
+    CMD="${CMD} && sudo chown -R gpadmin: ~gpadmin"
 
     # Execute the commands
     ssh -t tux@${i} "${CMD}"
