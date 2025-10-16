@@ -127,11 +127,13 @@ done
 Authorize the public key of the coordinator's `gpadmin`user on each node in
 the cluster:
 ```bash
+ # Copy
  for i in ${WHPGCLSTR}; do
     echo "===== [${i}] ==========================================="
 
     # Copy local SSH pub key to node
     scp ~/.ssh/id_rsa.pub tux@${i}:/tmp/
+
 
     # Add the copied key as an authorized key for gpadmin user
     CMD='cat /tmp/id_rsa.pub | sudo tee -a ~gpadmin/.ssh/authorized_keys'
@@ -144,7 +146,20 @@ the cluster:
 
     # Execute the commands
     ssh -t tux@${i} "${CMD}"
+
+    # Copy gpadmin pub key from coordinator node
+    if [ "${i}" == "${MSTRDB}" ]; then
+        scp gpadmin@${MSTRDB}:~gpadmin/.ssh/id_rsa.pub \
+            /tmp/master-gpadmin.pub
+    fi
+
+    # Add gpadmin coordinator key to current node
+    CMD='cat >> ~/.ssh/authorized_keys'
+    cat /tmp/master-gpadmin.pub | ssh gpadmin@192.168.56.70 "${CMD}"
 done
+
+ # Remove the file
+ rm -f /tmp/master-gpadmin.pub
 ```
 
 ## Building the cluster
