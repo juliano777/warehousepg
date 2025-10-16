@@ -155,7 +155,7 @@ the cluster:
 
     # Add gpadmin coordinator key to current node
     CMD='cat >> ~/.ssh/authorized_keys'
-    cat /tmp/master-gpadmin.pub | ssh gpadmin@192.168.56.70 "${CMD}"
+    cat /tmp/master-gpadmin.pub | ssh gpadmin@${i} "${CMD}"
 done
 
  # Remove the file
