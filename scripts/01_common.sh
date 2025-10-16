@@ -37,9 +37,9 @@ update-alternatives --set python ${PYTHON}
 # Packages -------------------------------------------------------------------
 
 # Package list to be installed
-PKG="xerces-c neovim bash-completion procps-ng util-linux sudo \
-openssh-clients openssh-server iproute rsync python3-psycopg2 \
-python3-pyyaml python3-psutil python3-setuptools tree"
+PKG="xerces-c neovim bash-completion procps-ng util-linux sudo tree rsync \
+openssh-clients openssh-server iproute python${PYTHON_VERSON}-setuptools \
+python${PYTHON_VERSON}-psycopg2 python${PYTHON_VERSON}-pyyaml python3-psutil"
 
 # Install some packages and clear downloaded packages
 dnf install -y ${PKG} && dnf clean all
