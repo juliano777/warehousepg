@@ -157,7 +157,7 @@ From the coordinator node, gpadmin user, add each host member as a known host:
  # BY IP address
  for i in ${WHPGCLSTR}; do
     CMD="ssh-copy-id -o StrictHostKeyChecking=no ${i} 2> /dev/null"
-    ssh gpadmin@${i} "${CMD}"
+    ssh gpadmin@${MSTRDB} "${CMD}"
 done
 
  # By hostname and hostname with domain
