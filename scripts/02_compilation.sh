@@ -31,16 +31,12 @@ NJOBS=`expr \`nproc\` + 1`
 
 MAKEOPTS="-j${NJOBS}"
 
-CHOST="x86_64-unknown-linux-gnu"
+CHOST="`arch`-unknown-linux-gnu"
 
-"
-CFLAGS='-O2 -pipe -march=native -Wno-maybe-uninitialized -Wno-error'
-CFLAGS='-O2 -pipe -march=native -Wno-error -Wno-maybe-uninitialized'
-CXXFLAGS='-Wno-error'
-"
+CFLAGS='-O2 -pipe -march=native'
 
 # Configure (pre compilation)
-./configure --prefix=/usr/local/whpg --with-python
+./configure --prefix=/usr/local/whpg --with-python --host=${CHOST}
 
 # Compilation
 #make world
