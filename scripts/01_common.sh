@@ -39,8 +39,6 @@ export PYTHON_VERSON='${PYTHON_VERSON}'
 # Python binary
 export PYTHON='/usr/bin/python${PYTHON_VERSON}'
 
-# PYTHONPATH
-export PYTHONPATH="\`/usr/local/bin/get_pythonpath\`"
 EOF
 
 # Update alternatives regarding Python
