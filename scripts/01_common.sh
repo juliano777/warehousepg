@@ -18,22 +18,6 @@ dnf install -y python${PYTHON_VERSON}
 # Python binary
 export PYTHON="/usr/bin/python${PYTHON_VERSON}"
 
-# Profile script
-cat << EOF > /etc/profile.d/python.sh 
-# Python environment variables
-export PYTHON_VERSON='${PYTHON_VERSON}'
-
-# Python binary
-export PYTHON='/usr/bin/python${PYTHON_VERSON}'
-
-EOF
-
-# Update alternatives regarding Python
-update-alternatives --install /usr/bin/python3 python3 ${PYTHON} 1
-update-alternatives --install /usr/bin/python3 python ${PYTHON} 1
-update-alternatives --set python3 ${PYTHON}
-update-alternatives --set python ${PYTHON}
-
 # Python script to get PYTHONPATH
 cat << EOF > /usr/local/bin/get_pythonpath && \
 chmod +x /usr/local/bin/get_pythonpath
@@ -46,6 +30,25 @@ pythonpath = ':'.join([i for i in path if i != ''])
 # Print the variable
 print(pythonpath)
 EOF
+
+# Profile script
+cat << EOF > /etc/profile.d/python.sh 
+# Python environment variables
+export PYTHON_VERSON='${PYTHON_VERSON}'
+
+# Python binary
+export PYTHON='/usr/bin/python${PYTHON_VERSON}'
+
+# PYTHONPATH
+export PYTHONPATH="\`get_pythonpath\`"
+EOF
+
+# Update alternatives regarding Python
+update-alternatives --install /usr/bin/python3 python3 ${PYTHON} 1
+update-alternatives --install /usr/bin/python3 python ${PYTHON} 1
+update-alternatives --set python3 ${PYTHON}
+update-alternatives --set python ${PYTHON}
+
 
 # Packages -------------------------------------------------------------------
 
