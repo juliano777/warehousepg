@@ -5,7 +5,7 @@ clluster.
 
 ## About the lab environment
 
-This tutorial is based on [Rocky Linux](https://rockylinux.org) 10.  
+This tutorial is based on [Rocky Linux](https://rockylinux.org) 9.  
 But everyone is free to use any other Linux distribution based on RedHat.
 
 | **Role**                                      | **hostname** | **IP address** |
