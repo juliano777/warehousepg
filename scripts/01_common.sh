@@ -18,6 +18,15 @@ dnf install -y python${PYTHON_VERSON}
 # Python binary
 export PYTHON="/usr/bin/python${PYTHON_VERSON}"
 
+# Update alternatives regarding Python
+update-alternatives --install /usr/bin/python3 python3 ${PYTHON} 1
+update-alternatives --install /usr/bin/python3 python ${PYTHON} 1
+update-alternatives --set python3 ${PYTHON}
+update-alternatives --set python ${PYTHON}
+
+# Reinstall packages according to new Python version
+dnf reinstall -y python3 python3-dnf python-unversioned-command
+
 # Python script to get PYTHONPATH
 cat << EOF > /usr/local/bin/get_pythonpath && \
 chmod +x /usr/local/bin/get_pythonpath
@@ -39,14 +48,9 @@ export PYTHON_VERSON='${PYTHON_VERSON}'
 # Python binary
 export PYTHON='/usr/bin/python${PYTHON_VERSON}'
 
+# PYTHONPATH
+export PYTHONPATH="\`/usr/local/bin/get_pythonpath\`"
 EOF
-
-# Update alternatives regarding Python
-update-alternatives --install /usr/bin/python3 python3 ${PYTHON} 1
-update-alternatives --install /usr/bin/python3 python ${PYTHON} 1
-update-alternatives --set python3 ${PYTHON}
-update-alternatives --set python ${PYTHON}
-
 
 # Packages -------------------------------------------------------------------
 
