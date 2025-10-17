@@ -24,6 +24,9 @@ git clone https://github.com/warehouse-pg/warehouse-pg.git
 # Access the repository directory
 cd warehouse-pg
 
+# PYTHONPATH
+export PYTHONPATH="\`/usr/local/bin/get_pythonpath\`"
+
 # Flags for compilation
 CPPFLAGS="-DLINUX_OOM_SCORE_ADJ=0"
 
