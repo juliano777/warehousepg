@@ -250,3 +250,5 @@ for i in \${NODES}; do
 done
 EOF
 ```
+
+To do: `gpssh` `gpssh-exkeys`
