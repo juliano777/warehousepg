@@ -104,7 +104,5 @@ cat << EOF > /etc/hosts
 192.168.56.74   sdw4.my.domain  sdw4
 EOF
 
-fi
-
 # Reboot
 init 6
