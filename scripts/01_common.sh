@@ -10,7 +10,7 @@ dnf update -y
 
 # Python ---------------------------------------------------------------------
 # Set Python version
-export PYTHON_VERSON='3.11'
+export PYTHON_VERSON='3.9'
 
 # Install Python
 dnf install -y python${PYTHON_VERSON}
