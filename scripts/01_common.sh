@@ -40,7 +40,7 @@ export PYTHON_VERSON='${PYTHON_VERSON}'
 export PYTHON='/usr/bin/python${PYTHON_VERSON}'
 
 # PYTHONPATH
-export PYTHONPATH="\`get_pythonpath\`"
+export PYTHONPATH="\`/usr/local/bin/get_pythonpath\`"
 EOF
 
 # Update alternatives regarding Python
@@ -117,7 +117,7 @@ export PGDATABASE='gpadmin'
 export PATH="\${PATH}:\${WHPGBIN}"
 
 # PYTHONPATH
-export PYTHONPATH="\${GPHOME}/lib/python:\`get_pythonpath\`"
+export PYTHONPATH="\${GPHOME}/lib/python:\`/usr/local/bin/get_pythonpath\`"
 
 # Unset variable
 unset WHPGBIN
