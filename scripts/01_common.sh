@@ -34,6 +34,19 @@ update-alternatives --install /usr/bin/python3 python ${PYTHON} 1
 update-alternatives --set python3 ${PYTHON}
 update-alternatives --set python ${PYTHON}
 
+# Python script to get PYTHONPATH
+cat << EOF > /usr/local/bin/get_pythonpath && \
+chmod +x /usr/local/bin/get_pythonpath
+#!/usr/bin/env python
+from sys import path
+
+# List comprehension to get PYTHONPATH
+pythonpath = ':'.join([i for i in path if i != ''])
+
+# Print the variable
+print(pythonpath)
+EOF
+
 # Packages -------------------------------------------------------------------
 
 # Package list to be installed
@@ -89,16 +102,19 @@ export DATA_DIRECTORY="/var/local/whpg/data/sdw1 /var/local/whpg/data/sdw2 \
 export COORDINATOR_DATA_DIRECTORY="\${MASTER_DIRECTORY}/gpseg-1"
 
 # DB port
-export PGPORT=5432
+export PGPORT='5432'
 
 # DB user
-export PGUSER=gpadmin
+export PGUSER='gpadmin'
 
 # Database
-export PGDATABASE=gpadmin
+export PGDATABASE='gpadmin'
 
 # PATH
 export PATH="\${PATH}:\${WHPGBIN}"
+
+# PYTHONPATH
+export PYTHONPATH="\${GPHOME}/lib/python:\`get_pythonpath\`"
 
 # Unset variable
 unset WHPGBIN
