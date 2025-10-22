@@ -77,7 +77,7 @@ System configuration for all servers:
     ssh tux@${i} 'chmod +x /tmp/scripts/*'
 
     # Perform all common tasks
-    ssh -t tux@${i} 'sudo /tmp/scripts/00_sys.sh'
+    ssh -t tux@${i} 'sudo /tmp/scripts/00-sys.sh'
 done
 ```
 
