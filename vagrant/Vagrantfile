@@ -25,7 +25,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       node.vm.provider "virtualbox" do |vb|
         vb.name = "#{name}"
-        vb.customize ["modifyvm", :id, "--groups", "/WarehousePg"]        
+        vb.customize ["modifyvm", :id, "--groups", "/WarehousePg"]
+        vb.customize ["modifyvm", :id, "--audio", "none"]
       end
 
       # Provision user 'tux' and set up SSH access
