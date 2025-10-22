@@ -11,13 +11,6 @@ DOMAIN='my.domain'
 # Erase the hosts file
 > ~gpadmin/hostfile_gpinitsystem
 
-# Segment hosts file and host add key
-for i in ${SEG}; do
-    echo "${i}" >> ~gpadmin/hostfile_gpinitsystem
-    ssh-copy-id -o StrictHostKeyChecking=no ${i} 2> /dev/null
-    ssh-copy-id -o StrictHostKeyChecking=no ${i}.${DOMAIN} 2> /dev/null
-done
-
 # Initialization configuration file for WarehousePG
 cat << EOF > ~gpadmin/gpinitsystem_config
 ARRAY_NAME='whcluster_acme'
@@ -39,5 +32,12 @@ for i in ${DATA_DIRECTORY}; do
     echo "DATA_DIRECTORY='${i}'" >> ~gpadmin/gpinitsystem_config
 done
 
-# Cluster creation
-gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem -a
+# Erase the hosts file
+> ~gpadmin/hostfile_gpinitsystem
+
+# Segment hosts file and host add key
+for i in ${SEG}; do
+    echo "${i}.${DOMAIN}" >> ~gpadmin/hostfile_gpinitsystem
+    ssh-copy-id -o StrictHostKeyChecking=no ${i} 2> /dev/null
+    ssh-copy-id -o StrictHostKeyChecking=no ${i}.${DOMAIN} 2> /dev/null
+done

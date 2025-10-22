@@ -47,7 +47,7 @@ Environment variables regarding servers:
  MSTRDB='192.168.56.70'
 
  # Segment Node IPs
- SEGNODES='192.168.56.71 192.168.56.72 192.168.56.73 192.168.56.74'
+ SEGNODES='192.168.56.71 192.168.56.72 192.168.56.73'
 
  # Cluster members
  WHPGCLSTR="${MSTRDB} ${SEGNODES}"
@@ -71,7 +71,7 @@ System configuration for all servers:
  for i in ${ALLSRV}; do
     echo "===== [${i}] ==========================================="
     # Copy scripts directory into the server
-    scp -r scripts tux@${i}:/tmp/
+    rsync --delete-before -r scripts tux@${i}:/tmp/
 
     # Make all scripts executable
     ssh tux@${i} 'chmod +x /tmp/scripts/*'
@@ -89,7 +89,7 @@ Initial tasks for all servers:
     echo "===== [${i}] ==========================================="
 
     # Perform all common tasks
-    ssh -t tux@${i} 'sudo /tmp/scripts/01_common.sh'
+    ssh -t tux@${i} 'sudo /tmp/scripts/01-common.sh'
 done
 ```
 
@@ -98,7 +98,7 @@ done
 Conpilation:
 ```bash
 # Compilation script
-ssh -t tux@${CMPLR} 'sudo /tmp/scripts/02_compilation.sh'
+ssh -t tux@${CMPLR} 'sudo /tmp/scripts/02-compilation.sh'
 
 # Copy the generated tarball to local /tmp
 scp tux@${CMPLR}:/tmp/whpg.tar.xz /tmp/
@@ -120,14 +120,13 @@ WarehoousePG tarball installation on nodes:
     scp /tmp/whpg.tar.xz tux@${i}:/tmp/
 
     # Exectute script to install dependencies and install the tarball content
-    ssh -t tux@${i} 'sudo /tmp/scripts/03_nodes.sh'
+    ssh -t tux@${i} 'sudo /tmp/scripts/03-nodes.sh'
 done
 ```
 
 Authorize the public key of the coordinator's `gpadmin`user on each node in
 the cluster:
 ```bash
- # Copy
  for i in ${WHPGCLSTR}; do
     echo "===== [${i}] ==========================================="
 
@@ -164,9 +163,10 @@ done
 
 ## Building the cluster
 
-From the coordinator node, gpadmin user, add each host member as a known host:
+From the coordinator node, `gpadmin `user, add each host member as a known
+host:
 ```bash
- MEMBERS='masterdb sdw1 sdw2 sdw3 sdw4'
+ MEMBERS='masterdb sdw1 sdw2 sdw3'
  DOMAIN='my.domain'
 
  # BY IP address
@@ -191,64 +191,29 @@ done
 done 
 ```
 
+Creating the coordinator node configuration
+```bash
+ssh gpadmin@${MSTRDB} 'bash -l -c "/tmp/scripts/04-coord_conf.sh"'
+```
+
 Creating directories for the coordinator and segments:
 ```bash
- for i in ${WHPGCLSTR}; do
-    echo "===== [${i}] ==========================================="
+ # Command to create directories on segments
+ CMD='source ~/.whpg_vars && mkdir -p ${DATA_DIRECTORY}'
 
-    # Coomand to create the directories
-    CMD='source ~/.whpg_vars && mkdir -p ${DATA_DIRECTORY}'
-    CMD_MSTR="${CMD} \${MASTER_DIRECTORY}"
-    
-    if [ ${i} == ${MSTRDB} ]; then
-        # Command to create directories in the coordinator
-        CMD="${CMD_MSTR}"
-    fi
+ # Command to create directories on coordinator
+ CMD_MSTR="${CMD} \${MASTER_DIRECTORY}"
 
-    # Command execution via SSH
-    ssh -t tux@${i} "sudo su - gpadmin -c '${CMD}'"
+ # Directories creation on coordinator
+ ssh gpadmin@${MSTRDB} "${CMD}"
 
-done
+ # Directories creation on segments
+ CMD="gpssh -f ~/hostfile_gpinitsystem '${CMD}'"
+ ssh gpadmin@${MSTRDB} "${CMD}" 
 ```
 
-Building the cluster on coordinator node:
+Cluster creation:
 ```bash
-# Execute the script that will build the cluster
-ssh gpadmin@${MSTRDB} 'bash -l -c "/tmp/scripts/04_masterdb.sh"'
+ CMD='gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem -a'
+ ssh gpadmin@${MSTRDB} "${CMD}" 
 ```
-
-## Extra
-
-In case of error it's possible to use reset script and start over.  
-On coordinator node, user `gpadmin`:
-```bash
-cat << EOF > reset.sh && chmod +x reset.sh
-#!/bin/bash
-
-# Coordinator node -----------------------------------------------------------
-
-# Remove directories
-rm -fr /var/local/whpg/{data,gpAdminLogs}
-
-# Recreating the directories
-mkdir -p /var/local/whpg/data/sdw{1,2,3} /var/local/whpg/data/master
-
-# Segment nodes --------------------------------------------------------------
-NODES='sdw1 sdw2 sdw3'
-for i in \${NODES}; do
-    # Command to remove the directories
-    DIRRM='rm -fr /var/local/whpg/data'
-
-    # Command to recreate the directories
-    DIRMK='mkdir -p /var/local/whpg/data/sdw{1,2,3}'
-
-    # Command to be executed merging both
-    CMD="\${DIRRM} && \${DIRMK}"
-
-    # Command execution
-    ssh \${i} "\${CMD}"
-done
-EOF
-```
-
-To do: `gpssh` `gpssh-exkeys`
