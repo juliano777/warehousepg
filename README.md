@@ -202,14 +202,14 @@ Creating directories for the coordinator and segments:
  CMD='source ~/.whpg_vars && mkdir -p ${DATA_DIRECTORY}'
 
  # Command to create directories on coordinator
- CMD_MSTR="${CMD} \${MASTER_DIRECTORY}"
+ CMD_COORD="${CMD} \${MASTER_DIRECTORY}"
 
  # Directories creation on coordinator
- ssh gpadmin@${MSTRDB} "${CMD}"
+ ssh gpadmin@${MSTRDB} "${CMD_COORD}"
 
  # Directories creation on segments
  CMD="gpssh -f ~/hostfile_gpinitsystem '${CMD}'"
- CMD="bash -l -c '${CMD}'"
+ CMD="bash -l -c \"${CMD}\""
 
  ssh gpadmin@${MSTRDB} "${CMD}" 
 ```
