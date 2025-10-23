@@ -208,12 +208,15 @@ Creating directories for the coordinator and segments:
  ssh gpadmin@${MSTRDB} "${CMD}"
 
  # Directories creation on segments
- CMD="gpssh -f ~/hostfile_gpinitsystem '${CMD}'"
+ CMD="/usr/local/whpg/bin/gpssh -f ~/hostfile_gpinitsystem '${CMD}'"
  ssh gpadmin@${MSTRDB} "${CMD}" 
 ```
 
 Cluster creation:
 ```bash
- CMD='gpinitsystem -c ~/gpinitsystem_config -h ~/hostfile_gpinitsystem -a'
+ CMD="/usr/local/whpg/bin/gpinitsystem \
+    -c ~/gpinitsystem_config \
+    -h ~/hostfile_gpinitsystem -a"
+    
  ssh gpadmin@${MSTRDB} "${CMD}" 
 ```
