@@ -198,20 +198,27 @@ ssh gpadmin@${MSTRDB} 'bash -l -c "/tmp/scripts/04-coord_conf.sh"'
 
 Creating directories for the coordinator and segments:
 ```bash
- # Command to create directories on segments
- CMD='source ~/.whpg_vars && mkdir -p ${DATA_DIRECTORY}'
 
- # Command to create directories on coordinator
- CMD_COORD="${CMD} \${MASTER_DIRECTORY}"
+ # Data directories variable   
+ DATA_DIRECTORY="`ssh gpadmin@${MSTRDB} 'source ~/.whpg_vars && \
+    echo ${DATA_DIRECTORY}'`"
+
+ # Master directory variable
+ MASTER_DIRECTORY="`ssh gpadmin@${MSTRDB} 'source ~/.whpg_vars && \
+    echo ${MASTER_DIRECTORY}'`"
+
+ # Create directories on segments
+ CMD="mkdir -p ${DATA_DIRECTORY}"
+
+ # Create directories on coordinator node
+ CMD_COORD="${CMD} ${MASTER_DIRECTORY}"
+
+ # Directories creation on segments
+ CMD="bash -l -c 'gpssh -f ~/hostfile_gpinitsystem \"${CMD}\"'"
+ ssh gpadmin@${MSTRDB} "${CMD}"
 
  # Directories creation on coordinator
  ssh gpadmin@${MSTRDB} "${CMD_COORD}"
-
- # Directories creation on segments
- CMD="gpssh -f ~/hostfile_gpinitsystem '${CMD}'"
- CMD="bash -l -c \"${CMD}\""
-
- ssh gpadmin@${MSTRDB} "${CMD}" 
 ```
 
 Cluster creation:
