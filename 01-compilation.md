@@ -6,16 +6,16 @@ the WarehousePg cluster.
 
 ```bash
  # Copy public SSH key automatically accepting the host key
- ssh-copy-id -o StrictHostKeyChecking=no tux@${i} 2> /dev/null
+ ssh-copy-id -o StrictHostKeyChecking=no tux@${CMPLR} 2> /dev/null
 
  # Copy scripts directory into the server
- rsync --delete-before -r scripts tux@${i}:/tmp/
+ rsync --delete-before -r scripts tux@${CMPLR}:/tmp/
 
  # Make all scripts executable
- ssh tux@${i} 'chmod +x /tmp/scripts/*'
+ ssh tux@${CMPLR} 'chmod +x /tmp/scripts/*'
 
  # Perform all common tasks
- ssh -t tux@${i} 'sudo /tmp/scripts/01-common.sh' 
+ ssh -t tux@${CMPLR} 'sudo /tmp/scripts/01-common.sh' 
 ```
 
 Compilation:
