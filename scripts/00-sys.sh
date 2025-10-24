@@ -94,14 +94,13 @@ cat << EOF > /etc/hosts
 
 127.0.0.1	    localhost.localdomain   localhost
 
-192.168.56.99   compiler.my.domain  compiler
-
 # WarehousePg cluster --------------------------------------------------------
-192.168.56.70   masterdb.my.domain  masterdb
+192.168.56.10   masterdb-01.my.domain  masterdb01
+192.168.56.20   masterdb-02.my.domain  masterdb02
+192.168.56.70   sdw0.my.domain  sdw0
 192.168.56.71   sdw1.my.domain  sdw1
 192.168.56.72   sdw2.my.domain  sdw2
 192.168.56.73   sdw3.my.domain  sdw3
-192.168.56.74   sdw4.my.domain  sdw4
 EOF
 
 # Reboot
