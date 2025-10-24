@@ -1,4 +1,4 @@
-**WarehousePg tutorial**
+# WarehousePg tutorial
 
 This tutoriam amis to explain in a practical way how to build a WarehousePg
 clluster.
