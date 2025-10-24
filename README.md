@@ -3,6 +3,8 @@
 This tutoriam amis to explain in a practical way how to build a WarehousePg
 clluster.
 
+---
+
 # About the lab environment
 
 This tutorial is based on [AlmaLinux](https://almalinux.org) 9.  
