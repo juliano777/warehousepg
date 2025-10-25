@@ -5,8 +5,8 @@ source ~/.whpg_vars
 
 # Cluster initial configuration ----------------------------------------------
 
-SEG='sdw1 sdw2 sdw3'
-DOMAIN='my.domain'
+SEGS=${1}
+DOMAIN=${2}
 
 # Erase the hosts file
 > ~gpadmin/hostfile_gpinitsystem
@@ -36,7 +36,7 @@ done
 > ~gpadmin/hostfile_gpinitsystem
 
 # Segment hosts file and host add key
-for i in ${SEG}; do
+for i in ${SEGS}; do
     echo "${i}.${DOMAIN}" >> ~gpadmin/hostfile_gpinitsystem
     ssh-copy-id -o StrictHostKeyChecking=no ${i} 2> /dev/null
     ssh-copy-id -o StrictHostKeyChecking=no ${i}.${DOMAIN} 2> /dev/null

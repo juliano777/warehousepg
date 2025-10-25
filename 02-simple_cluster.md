@@ -127,7 +127,8 @@ done
 
 Creating the coordinator node configuration
 ```bash
-ssh gpadmin@${MSTRDB} 'bash -l -c "/tmp/scripts/05-coord_conf.sh"'
+CMD="bash -l -c /tmp/scripts/05-coord_conf.sh '${SEGS}' '${DOMAIN}'"
+ssh gpadmin@${MSTRDB} "${CMD}"
 ```
 
 Creating directories for the coordinator and segments:
