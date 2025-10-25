@@ -14,23 +14,3 @@ tar xf /tmp/whpg.tar.xz -C /
 
 # Install the packages
 dnf install -y ${PKG}
-
-# gpadmin system user --------------------------------------------------------
-
-# Group creation
-groupadd -r gpadmin
-
-# User creation
-useradd \
-    -s /bin/bash \
-    -md /var/local/whpg \
-    -k /etc/skel \
-    -g gpadmin \
-    -G wheel \
-    -c 'Greenplum admin WarehousePG user' \
-    -r gpadmin
-
-# Generate SSH keys for gpadmin
-if [ ! -f ~gpadmin/.ssh/id_rsa ]; then
-    su - gpadmin -c "ssh-keygen -t rsa -b 4096 -P '' -f ~/.ssh/id_rsa";
-fi
