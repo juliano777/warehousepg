@@ -3,24 +3,33 @@
 # In case of error it's possible to use reset script and start over.  
 # On coordinator node, user gpadmin
 
+#
+gpstop -a
+
 # Remove directories
 rm -fr /var/local/whpg/{data,gpAdminLogs}
 
-# Recreating the directories
-mkdir -p /var/local/whpg/data/sdw{1,2,3} /var/local/whpg/data/master
+# Segment names
+SEGS=`cut -f1 -d. ~/hostfile_gpinitsystem | tr '\n' ' '`
 
-# Segment nodes --------------------------------------------------------------
-NODES='sdw1 sdw2 sdw3'
-for i in \${NODES}; do
-    # Command to remove the directories
-    DIRRM='rm -fr /var/local/whpg/data'
+# Base directory 
+DIRBASE='/var/local/whpg/data'
 
-    # Command to recreate the directories
-    DIRMK='mkdir -p /var/local/whpg/data/sdw{1,2,3}'
-
-    # Command to be executed merging both
-    CMD="\${DIRRM} && \${DIRMK}"
-
-    # Command execution
-    ssh \${i} "\${CMD}"
+# Recreating the directories -------------------------------------------------
+# Segment directories variable
+DIRSEGS=()
+for i in ${SEGS}; do
+    DIRSEGS+="${DIRBASE}/${i} "
 done
+
+# Master directory variable
+DIRMASTER="${DIRBASE}/master"
+
+# Common command to be executed on all nodes
+CMD="mkdir -p ${DIRSEGS}"
+
+# Local execution
+eval "${CMD} ${DIRMASTER}"
+
+gpssh -f ~/hostfile_gpinitsystem "rm -fr ${DIRBASE}"
+gpssh -f ~/hostfile_gpinitsystem "${CMD}"
