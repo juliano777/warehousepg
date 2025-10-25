@@ -68,12 +68,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  # Define the 6 VMs
+  # Define the 7 VMs
   define_vm(config, "compiler", "compiler.my.domain", "192.168.56.99")
-  define_vm(config, "masterdb", "masterdb.my.domain", "192.168.56.70")
-  define_vm(config, "sdw1", "sdw1.my.domain", "192.168.56.71")
-  define_vm(config, "sdw2", "sdw2.my.domain", "192.168.56.72")
-  define_vm(config, "sdw3", "sdw3.my.domain", "192.168.56.73")
-  define_vm(config, "sdw4", "sdw4.my.domain", "192.168.56.74")
+  define_vm(config, "masterdb-01", "masterdb-01.my.domain", "192.168.56.10")
+  define_vm(config, "masterdb-02", "masterdb-02.my.domain", "192.168.56.20")
+  define_vm(config, "sdw0", "sdw1.my.domain", "192.168.56.70")
+  define_vm(config, "sdw1", "sdw2.my.domain", "192.168.56.71")
+  define_vm(config, "sdw2", "sdw3.my.domain", "192.168.56.72")
+  define_vm(config, "sdw3", "sdw4.my.domain", "192.168.56.73")
 end
 
