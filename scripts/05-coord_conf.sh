@@ -5,8 +5,28 @@ source ~/.whpg_vars
 
 # Cluster initial configuration ----------------------------------------------
 
-SEGS=${1}
-DOMAIN=${2}
+# Default values
+SEGS=''
+DOMAIN=''
+
+# Parse arguments
+while getopts "s:d:" opt; do
+  case "$opt" in
+    s) SEGS="${OPTARG}" ;;
+    d) DOMAIN="${OPTARG}" ;;
+    *)
+      echo "Uso: $0 -s \"sdw1 sdw2 ...\" -d dominio"
+      exit 1
+      ;;
+  esac
+done
+
+# Verifica se os parâmetros obrigatórios foram informados
+if [[ -z "${SEGS}" || -z "${DOMAIN}" ]]; then
+  echo "Error: Both -s and -d parameters must be specified"
+  echo "Use: $0 -s \"sdw1 sdw2 ...\" -d dominio"
+  exit 1
+fi
 
 # Erase the hosts file
 > ~gpadmin/hostfile_gpinitsystem
@@ -15,7 +35,7 @@ DOMAIN=${2}
 cat << EOF > ~gpadmin/gpinitsystem_config
 ARRAY_NAME='whcluster_acme'
 DATABASE_NAME='${PGDATABASE}'
-COORDINATOR_HOSTNAME='`hostname -f`'
+COORDINATOR_HOSTNAME='$(hostname -f)'
 PORT_BASE='60000'
 MASTER_ARRAY_HOST='0'
 COORDINATOR_PORT=${PGPORT}
