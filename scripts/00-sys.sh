@@ -95,8 +95,8 @@ cat << EOF > /etc/hosts
 127.0.0.1	    localhost.localdomain   localhost
 
 # WarehousePg cluster --------------------------------------------------------
-192.168.56.10   masterdb-01.my.domain  masterdb01
-192.168.56.20   masterdb-02.my.domain  masterdb02
+192.168.56.10   masterdb-01.my.domain  masterdb-01
+192.168.56.20   masterdb-02.my.domain  masterdb-02
 192.168.56.70   sdw0.my.domain  sdw0
 192.168.56.71   sdw1.my.domain  sdw1
 192.168.56.72   sdw2.my.domain  sdw2
