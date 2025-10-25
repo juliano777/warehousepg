@@ -17,8 +17,8 @@ But everyone is free to use any other Linux distribution based on RedHat.
 | Standby coordinator (initially out of the cluster)  | masterdb-02  | 192.168.56.20  |
 | Segment host 1                                      | sdw0         | 192.168.56.70  |
 | Segment host 2                                      | sdw1         | 192.168.56.71  |
-| Segment host 3                                      | sdw3         | 192.168.56.72  |
-| Segment host 4 (initially out of the cluster)       | sdw4         | 192.168.56.73  |
+| Segment host 3                                      | sdw2         | 192.168.56.72  |
+| Segment host 4 (initially out of the cluster)       | sdw3         | 192.168.56.73  |
 
 --- 
 
