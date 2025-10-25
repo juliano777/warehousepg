@@ -28,19 +28,19 @@ Environment variables regarding servers:
  CMPLR='192.168.56.99'
 
  # Master (coordinator)
- MSTRDB='192.168.56.70'
+ MSTRDB='192.168.56.10'
 
  # Segment node IPs
- SEGNODES='192.168.56.71 192.168.56.72 192.168.56.73'
+ SEGNODES='192.168.56.70 192.168.56.71 192.168.56.72'
 
  # Cluster members
  WHPGCLSTR="${MSTRDB} ${SEGNODES}"
 
  # Segment node names
- SEGS='sdw1 sdw2 sdw3'
+ SEGS='sdw0 sdw1 sdw2'
 
  # Coordinator / master node
- MSTRDB_NAME='masterdb'
+ MSTRDB_NAME='masterdb-01'
 
  # Cluster members
  MEMBERS="${MSTRDB_NAME} ${SEGS}"
