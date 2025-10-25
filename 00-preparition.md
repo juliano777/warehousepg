@@ -36,9 +36,6 @@ Environment variables regarding servers:
  # Cluster members
  WHPGCLSTR="${MSTRDB} ${SEGNODES}"
 
- # All servers
- ALLSRV="${CMPLR} ${WHPGCLSTR}"
-
  # Segment node names
  SEGS='sdw1 sdw2 sdw3'
 
@@ -46,7 +43,7 @@ Environment variables regarding servers:
  MSTRDB_NAME='masterdb'
 
  # Cluster members
-  MEMBERS="${MSTRDB_NAME} ${SEGS}"
+ MEMBERS="${MSTRDB_NAME} ${SEGS}"
  
  # Domain 
  DOMAIN='my.domain'
