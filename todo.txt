@@ -1,1 +1,16 @@
 declare -a DATA_DIRECTORY=(/var/local/whpg/data/sdw0 /var/local/whpg/data/sdw1 /var/local/whpg/data/sdw2)
+
+
+The segments need a special options flag enabled at connection start:
+
+[gpadmin@aad2e945090e ~]$ psql -p 7000 -d gpadmin
+psql: FATAL:  connections to primary segments are not allowed
+DETAIL:  This database instance is running as a primary segment in a Greenplum cluster and does not permit direct connections.
+HINT:  To force a connection anyway (dangerous!), use utility mode.
+
+
+[gpadmin@aad2e945090e ~]$ PGOPTIONS='-c gp_session_role=utility' psql -p 7000 -d gpadmin
+psql (9.4.26)
+Type "help" for help.
+gpadmin=# 
+
