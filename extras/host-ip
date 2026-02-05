@@ -37,13 +37,13 @@ EOF
 
 chmod 600 "${CONFILE}"
 
-echo "[INFO] Restarting NetworkManager..."
+echo '[INFO] Restarting NetworkManager...'
 systemctl restart NetworkManager
 
-echo "[INFO] Applying configuration..."
+echo '[INFO] Applying configuration...'
 nmcli dev reapply "${IFACE}" || nmcli con up "${IFACE}"
 
-echo "[OK] Setup complete."
+echo '[OK] Setup complete.'
 echo
-hostnamectl status | grep "Static hostname"
-ip -4 addr show dev "${IFACE}" | grep "inet "
+hostnamectl status | grep 'Static hostname'
+ip -4 addr show dev "${IFACE}" | grep 'inet '
